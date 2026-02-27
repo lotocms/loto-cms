@@ -1,0 +1,29 @@
+{
+  "name": "loto-cms",
+  "version": "1.0.0",
+  "description": "LotoCMS 是一款基于Node、Express5、MySQL、Vue3研发的高质量实用型CMS系统。",
+  "keywords": [
+    "\"CMS\""
+  ],
+  "homepage": "https://github.com/lotocms/loto-cms#readme",
+  "bugs": {
+    "url": "https://github.com/lotocms/loto-cms/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lotocms/loto-cms.git"
+  },
+  "license": "MIT",
+  "author": "lanbery@gmail.com",
+  "type": "module",
+  "main": "app.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "axios": "^1.13.5"
+  }
+}
