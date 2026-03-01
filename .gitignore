@@ -1,3 +1,9 @@
 # sublibs/*
 package-lock.json
+pnpm-lock.yaml
 node_modules/
+
+# .vscode/*
+# .idea/*   
+# .DS_Store
+.env.*

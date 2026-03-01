@@ -1,0 +1,13 @@
+admin
+cover
+user
+uploads
+./**/*
+!.gitignore
+!.htaccess
+!favicon.ico
+!robots.txt
+
+template/**
+!./template/default
+
