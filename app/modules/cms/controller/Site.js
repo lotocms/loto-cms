@@ -3,6 +3,7 @@ const {
   config,
 } = Chan;
 import Site from "../service/Site.js";
+
 class SiteController extends Chan.Controller {
   // 查
   async info(req, res, next) {

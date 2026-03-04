@@ -1,6 +1,6 @@
 export const upload = {
-  logoSize: 50 * 1024, // 50kb
-  imgSize: 200 * 1024, // 100kb
+  logoSize: 2 * 1024 * 1024, // 50kb
+  imgSize: 20 * 1024 * 1024, // 100kb
 };
 
 export default {
