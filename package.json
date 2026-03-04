@@ -1,15 +1,19 @@
 {
   "name": "loto-cms",
   "version": "1.1.0",
+  "type": "module",
   "description": "LotoCMS 是一款基于Node、Express5、MySQL、Vue3研发的高质量实用型CMS系统。",
   "keywords": [
     "\"CMS\""
   ],
+  "main": "app.js",
   "scripts": {
     "dev": "node --env-file=.env.dev --watch app.js",
     "dev:watch": "node --env-file=.env.dev --watch --watch-path=. app.js",
     "prd": "pm2 start pm2.json",
-    "check": "npm audit"
+    "check": "npm audit",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check"
   },
   "homepage": "https://github.com/lotocms/loto-cms#readme",
   "bugs": {
@@ -21,16 +25,16 @@
   },
   "license": "MIT",
   "author": "lanbery@gmail.com",
-  "type": "module",
-  "main": "app.js",
   "directories": {
     "doc": "docs"
   },
   "dependencies": {
-    "@lotomic/chanjs": "^0.0.3",
+    "@lotomic/chanjs": "file:../loto-chanjs",
     "art-template": "^4.13.4",
     "axios": "^1.13.5",
+    "bcryptjs": "^3.0.3",
     "body-parser": "^2.2.2",
+    "cheerio": "^1.2.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "crypto-js": "^4.2.0",
@@ -38,14 +42,23 @@
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "express-art-template": "^1.0.1",
+    "express-safe": "^1.0.9",
+    "iconv-lite": "^0.7.2",
     "jsonwebtoken": "^9.0.3",
     "knex": "^3.1.0",
+    "mitt": "^3.0.1",
     "morgan": "^1.10.1",
+    "multer": "^2.1.0",
     "mysql2": "^3.18.2",
+    "nodemailer": "^8.0.1",
+    "qiniu": "^7.15.1",
     "schedule": "^0.5.0",
-    "serve-favicon": "^2.5.1"
+    "serve-favicon": "^2.5.1",
+    "xml2js": "^0.6.2",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
-    "nodemon": "^3.1.14"
+    "nodemon": "^3.1.14",
+    "prettier": "^3.8.1"
   }
 }

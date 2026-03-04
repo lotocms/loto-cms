@@ -1,25 +1,13 @@
-﻿import Chan from "@lotomic/chanjs";
+import { createRequire } from "node:module";
 
-// Compatibility shim for chanjs typo: COMM_PATH vs COMMON_PATH.
-if (typeof globalThis.COMM_PATH === "undefined" && typeof globalThis.COMMON_PATH !== "undefined") {
-  Object.defineProperty(globalThis, "COMM_PATH", {
-    value: globalThis.COMMON_PATH,
-    writable: false,
-    configurable: false,
-    enumerable: true,
-  });
-}
+globalThis.requirejs = createRequire(import.meta.url);
 
-const chan = new Chan();
-await chan.start(() => {
-  // console.log("Starting Chan...", Chan.config);
-});
+const { default: Chan } = await import("@lotomic/chanjs");
 
-chan.beforeStart(async () => {
-  // await chan.loadConfig();
-});
+const chan = new Chan({ port: 4000 });
+await chan.start();
 
 chan.run((port) => {
-  console.log(`${Chan.config.APP_NAME} is running on ${port}`);
-  console.log("Starting Chan...", Chan.config);
+  console.log(`🌟 ${Chan.config.APP_NAME} is running on  http://localhost:${port}`);
+  console.log(`🌟 ${Chan.config.APP_NAME} is running on  http://localhost:${port}/public/admin`);
 });
