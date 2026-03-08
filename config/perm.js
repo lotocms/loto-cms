@@ -1,0 +1,19 @@
+export const perms = [
+  "category",
+  "article",
+  "slide",
+  "tag",
+  "collect",
+  "gather",
+  "model",
+  "field",
+  "friendlink",
+  "message",
+  "user",
+  "role",
+  "menu",
+];
+
+export default {
+  perms,
+};

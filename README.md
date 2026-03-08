@@ -1,3 +1,3 @@
 # Loto CMS
-> extends from chancms
 
+> extends from chancms

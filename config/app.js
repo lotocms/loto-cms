@@ -3,7 +3,7 @@ export const APP_VERSION = "1.0.2";
 export const APP_VERSION_TIME = "2026-02-28";
 export const APP_AUTHOR_EMAIL = "lotomic@qq.com";
 export const APP_AUTHOR_WECHAT = "lotomic";
-export const PORT = process.env.PORT || "3001";
+export const PORT = process.env.PORT || "4000";
 export const BODY_LIMIT = process.env.BODY_LIMIT || "100kb";
 export const NODE_ENV = process.env.NODE_ENV || "development";
 export const APP_DEBUG = process.env.APP_DEBUG === "true";
