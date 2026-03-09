@@ -22,7 +22,7 @@ export default () => {
       }
       // 3. 验证并解析token
       const { username, uid, f, i, exp } = await getToken(token, JWT_SECRET);
-      console.log({ username, uid, f, i, exp })
+      console.log({ username, uid, f, i, exp });
 
       // 4. 验证用户基本信息
       if (!username || !uid || !f || exp === undefined) {
@@ -31,9 +31,9 @@ export default () => {
 
       // 5. 获取并验证设备信息
       const { _f } = req.cookies;
-      
+
       console.log(`[Auth] 验证设备信息 - Cookie._f: ${_f}, Token.f: ${f}`);
-      
+
       // 验证设备指纹
       if (_f !== f) {
         console.log(`[Auth] 设备指纹不匹配: ${_f} !== ${f}`);
@@ -48,15 +48,11 @@ export default () => {
         if (remainingTime <= 0) {
           return sendResponse(res, 401, "认证失败：token已过期");
         } else if (remainingTime < REFRESH_THRESHOLD) {
-          res.cookie(
-            "token",
-            setToken({ username, uid }, JWT_SECRET, JWT_EXPIRES_IN),
-            { 
-              httpOnly: true,
-              sameSite: 'strict',
-              secure: process.env.NODE_ENV === 'production'
-            }
-          );
+          res.cookie("token", setToken({ username, uid }, JWT_SECRET, JWT_EXPIRES_IN), {
+            httpOnly: true,
+            sameSite: "strict",
+            secure: process.env.NODE_ENV === "production",
+          });
         }
       }
 
@@ -64,7 +60,7 @@ export default () => {
       req.user = { username, uid };
 
       // 8. 计算当前请求的权限标识（只计算一次）
-      const perms = req.originalUrl.split('?')[0].split("/").filter(Boolean).join(":");
+      const perms = req.originalUrl.split("?")[0].split("/").filter(Boolean).join(":");
 
       // 确保权限数组存在
       if (!req.user.perms) {
@@ -72,18 +68,20 @@ export default () => {
         // allPerms 现在返回标准格式 { success, code, msg, data }
         if (permsRes.success && permsRes.data) {
           req.user.perms = permsRes.data
-            .map(item => item.perms)
-            .filter(perm => typeof perm === 'string' && perm.trim().length > 0);
+            .map((item) => item.perms)
+            .filter((perm) => typeof perm === "string" && perm.trim().length > 0);
         } else {
           req.user.perms = [];
-          console.log('[Auth] 获取用户权限失败:', permsRes);
+          console.log("[Auth] 获取用户权限失败:", permsRes);
         }
       }
       // 权限检查：精确匹配（最安全）
       const hasPermission = req.user.perms.some((item) => item === perms);
-      if (!hasPermission && perms !== 'base:menu:allRouter') {
-       console.log("error-->", perms);
-       return res.json({ code: 402, msg: "暂无权限" });
+      console.log("error-->", perms);
+      const permsWhiteList = ["base:menu:allRouter", "system:audit:logs:create"];
+      if (!hasPermission && !permsWhiteList.includes(perms)) {
+        console.log("error-->", perms);
+        return res.json({ code: 402, msg: "暂无权限" });
       }
 
       // 9. 继续处理请求

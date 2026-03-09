@@ -34,10 +34,7 @@ class ClientController extends Chan.Controller {
 
   async ip(req, res, next) {
     const queryIP = req.query.ip;
-    console.log(
-      ">>>>>>>>>>ClientController>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
-      req.query
-    );
+
     const clientIP = getIp(req);
 
     const targetIP = queryIP ? this.sanitizeIP(queryIP) : clientIP;

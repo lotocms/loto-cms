@@ -23,9 +23,9 @@ class SysAuditLogController extends Chan.Controller {
 
       let record = {
         ...req.body,
-        uid: user.id,
+        uid: user.uid,
         username: user?.username,
-        logtype: "system-login",
+        logtype: "sysuser-login",
         locked: true,
       };
       const data = await auditLogService.create(record);
