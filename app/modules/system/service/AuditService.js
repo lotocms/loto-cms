@@ -20,7 +20,7 @@ class SysAuditLogService extends Chan.Service {
     "update_time as updateTime",
   ];
   constructor() {
-    super(Chan.sysdb, "sys_audit_log");
+    super(Chan.sysdb, "sys_audit_signlog");
   }
 
   async create(data) {
