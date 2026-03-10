@@ -4,6 +4,7 @@ pnpm-lock.yaml
 node_modules/
 
 # .vscode/*
-# .idea/*   
+# .idea/*
 # .DS_Store
 .env.*
+.DS_Store
