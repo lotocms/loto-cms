@@ -14,7 +14,9 @@ export default (app, router, _config) => {
   systemRouter.use(init());
 
   // menu TODO auth
+  systemRouter.get("/menu/detail", controller.menu.detail);
   systemRouter.get("/menu/list", controller.menu.list);
+
   systemRouter.get("/menu/sub_list", controller.menu.subList);
   systemRouter.get("/menu/tree/all_nodes", controller.menu.allTreeNodes);
   systemRouter.get("/menu/tree/auth_nodes", controller.menu.allTreeNodes);

@@ -30,6 +30,16 @@ class MenuController extends Chan.Controller {
     }
   }
 
+  async detail(req, res, next){
+    try{
+      const {id} = req.query
+      const data = await menuService.findById(id)
+      res.json(this.success(data))
+    }catch(error){
+      next(error);
+    }
+  }
+
   async allTreeNodes(_req, res, next) {
     try {
       const data = await menuService.allMenuTreeNodes();
