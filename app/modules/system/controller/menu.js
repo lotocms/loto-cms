@@ -19,6 +19,25 @@ class MenuController extends Chan.Controller {
       next(error);
     }
   }
+
+  async subList(req, res, next) {
+    try {
+      const query = req.query || {};
+      const data = await menuService.getSubPageList(query);
+      res.json(this.success(data));
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async allTreeNodes(_req, res, next) {
+    try {
+      const data = await menuService.allMenuTreeNodes();
+      res.json(this.success(data));
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export default new MenuController();

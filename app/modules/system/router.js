@@ -15,6 +15,9 @@ export default (app, router, _config) => {
 
   // menu TODO auth
   systemRouter.get("/menu/list", controller.menu.list);
+  systemRouter.get("/menu/sub_list", controller.menu.subList);
+  systemRouter.get("/menu/tree/all_nodes", controller.menu.allTreeNodes);
+  systemRouter.get("/menu/tree/auth_nodes", controller.menu.allTreeNodes);
 
   // audit
   systemRouter.get("/audit/health", controller.auditlog.health);
@@ -22,5 +25,4 @@ export default (app, router, _config) => {
   systemRouter.post("/audit/logs/create", auth(), controller.auditlog.create);
 
   app.use("/system", systemRouter);
-
 };
