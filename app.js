@@ -4,7 +4,7 @@ globalThis.requirejs = createRequire(import.meta.url);
 
 const { default: Chan } = await import("@lotomic/chanjs");
 
-const chan = new Chan({ port: 4000 });
+const chan = new Chan({ port: 4000, snowId: 1 });
 await chan.start();
 
 chan.run((port) => {

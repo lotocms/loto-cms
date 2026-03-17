@@ -144,6 +144,35 @@ export class MenuService extends Chan.Service {
       data: treeNodes,
     };
   }
+
+  async createNew(body) {
+    const { pid = 0, ...others } = body;
+    const sortno = await this.getLevelMaxSortno(pid);
+    const res = await this.insert({ ...others, pid, sortno });
+    return res;
+  }
+
+  async getLevelMaxSortno(pid = 0) {
+    const result = await this.createQueryBuilder()
+      .max("sortno", { as: "maxSortno" })
+      // .select("MAX(sortno) as maxSortno")
+      .where({ pid })
+      .first();
+
+    const maxSortno = result?.maxSortno ? parseInt(result.maxSortno) : 0;
+    return maxSortno + 1;
+  }
+
+  async getUserRouter(userId) {
+    try {
+      console.log(`[SysMenu.allRouter] 开始查询用户 ${userId} 的菜单`);
+      const roles = await this.db("lts_role").select()
+    } catch (error) {
+      console.error(`[SysMenu.allRouter] 查询用户 ${userId} 的菜单时出错:`, error.message);
+      console.error(`[SysMenu.allRouter] 错误堆栈:`, error.stack);
+      return { success: false, code: 500, msg: "查询失败", data: { perms: [], routers: [] } };
+    }
+  }
 }
 
 export default new MenuService();

@@ -14,6 +14,7 @@ export default (app, router, _config) => {
   systemRouter.use(init());
 
   // menu TODO auth
+  systemRouter.post("/menu/create", controller.menu.create);
   systemRouter.get("/menu/detail", controller.menu.detail);
   systemRouter.get("/menu/list", controller.menu.list);
 

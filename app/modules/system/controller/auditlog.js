@@ -1,4 +1,5 @@
 import auditLogService from "../service/AuditService.js";
+import bcrypt from "bcryptjs";
 
 const {
   config,
@@ -36,7 +37,12 @@ class SysAuditLogController extends Chan.Controller {
   }
 
   async health(_req, res, _next) {
-    res.json(this.success({ ts: new Date() }));
+    // const nextId = Chan.snowflake.nextId();
+    const enpw = await bcrypt.hash("Admin!123", 13);
+
+    const nextId = global.snowflake?.nextUno();
+    console.log(nextId);
+    res.json(this.success({ ts: new Date(), nextId: nextId, enpw }));
   }
 
   async list(req, res, _next) {
