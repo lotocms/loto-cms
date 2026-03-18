@@ -13,7 +13,13 @@ export default (app, router, _config) => {
   const systemRouter = express.Router();
   systemRouter.use(init());
 
+  // suser
+  systemRouter.get("/suser/detail", controller.LotoUser.detail);
+  systemRouter.post("/suser/create", controller.LotoUser.create);
+
   // menu TODO auth
+
+  systemRouter.get("/menu/authRouter", controller.menu.allRouter);
   systemRouter.post("/menu/create", controller.menu.create);
   systemRouter.get("/menu/detail", controller.menu.detail);
   systemRouter.get("/menu/list", controller.menu.list);
@@ -28,4 +34,8 @@ export default (app, router, _config) => {
   systemRouter.post("/audit/logs/create", auth(), controller.auditlog.create);
 
   app.use("/system", systemRouter);
+
+  systemRouter.stack.forEach((layer, index) => {
+    console.log(`systemRouter ${systemRouter.name} : ${index}>>>>`, layer.route);
+  });
 };

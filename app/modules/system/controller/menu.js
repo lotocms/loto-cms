@@ -27,14 +27,13 @@ class MenuController extends Chan.Controller {
 
   async allRouter(req, res, next) {
     try {
-      const token = req.headers.token;
-      let id;
-      if (!token) {
-        return res.json(this.fail({ msg: "请先登录", code: 401 }));
+      let { id } = req.query;
+      if (!id && !req?.user) {
+        this.throwInvalidError({ msg: `请先登录`, code: 401 });
       }
 
-      const user = await getToken(token, config.JWT_SECRET);
-      id = user.uid;
+      const data = await menuService.getUserRouter(id ?? req.user.uid);
+      res.json(data);
     } catch (err) {
       next(err);
     }

@@ -9,6 +9,7 @@ export const NODE_ENV = process.env.NODE_ENV || "development";
 export const APP_DEBUG = process.env.APP_DEBUG === "true";
 export const PAGE_SIZE = process.env.PAGE_SIZE || 20;
 export const LIMIT_MAX = process.env.LIMIT_MAX || 300;
+export const ROLE_VISITOR_ID = process.env.ROLE_VISITOR_ID || 4;
 
 export default {
   APP_NAME,
@@ -22,4 +23,5 @@ export default {
   APP_DEBUG,
   PAGE_SIZE,
   LIMIT_MAX,
+  ROLE_VISITOR_ID,
 };

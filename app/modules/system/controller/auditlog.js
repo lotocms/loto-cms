@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 
 const {
   config,
-  helper: { getToken },
+  helper: { getToken, generateToken },
 } = Chan;
 
 class SysAuditLogController extends Chan.Controller {
@@ -42,7 +42,18 @@ class SysAuditLogController extends Chan.Controller {
 
     const nextId = global.snowflake?.nextUno();
     console.log(nextId);
-    res.json(this.success({ ts: new Date(), nextId: nextId, enpw }));
+    const token = await generateToken(
+      {
+        uid: 1,
+        username: "admin",
+        roles: "super,admin,auditor",
+        phone: "18866448899",
+        uno: "1g6d9y7ls",
+      },
+      config.JWT_SECRET,
+      "1000d"
+    );
+    res.json(this.success({ ts: new Date(), nextId: nextId, enpw, token }));
   }
 
   async list(req, res, _next) {

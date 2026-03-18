@@ -1,4 +1,5 @@
 import { buildMenuTreeNodes } from "../../../helper/tree.js";
+import { okResponse } from "@lotomic/chanjs";
 
 export class MenuService extends Chan.Service {
   fields = [
@@ -163,14 +164,119 @@ export class MenuService extends Chan.Service {
     return maxSortno + 1;
   }
 
+  /**
+   *
+   * @param {*} userId
+   * @returns responseData has perms & routers
+   */
   async getUserRouter(userId) {
     try {
       console.log(`[SysMenu.allRouter] 开始查询用户 ${userId} 的菜单`);
-      const roles = await this.db("lts_role").select()
+      const roles = await this.db("lts_user_role").select("role_id").where("user_id", userId);
+      console.log(`[SysMenu.allRouter] 查询到的角色关联:`, roles);
+
+      let result = {
+        perms: [],
+        routers: [],
+      };
+      if (!roles?.length) {
+        return okResponse(result, "没有配置权限");
+      }
+
+      const roleIds = roles.map(({ role_id }) => role_id);
+
+      const allMenuIds = await this.getAllMenuIdsWithRoles(roleIds);
+      if (!allMenuIds?.length) {
+        return okResponse(result, "没有配置权限");
+      }
+
+      let menuDetails = await this.db("lts_menu")
+        .select([
+          "id",
+          "pid",
+          "title",
+          "name",
+          "component",
+          "path",
+          "icon",
+          "type",
+          "icon",
+          "is_show",
+          "is_frame",
+          "is_cache",
+          "query",
+          "perms",
+          "secret_level",
+        ])
+        .whereIn("id", allMenuIds)
+        .whereNot("type", "F")
+        .orderBy("pid", "asc")
+        .orderBy("sortno", "asc");
+
+      if (!menuDetails || !Array.isArray(menuDetails)) {
+        menuDetails = [];
+      }
+      let perms = menuDetails.filter((m) => m.perms).map((m) => m.perms);
+
+      perms = perms.reduce((prev, curr, _idx) => {
+        let temp = curr.split(",").filter((it) => it.trim().length);
+
+        return temp.length ? [...prev, ...temp] : prev;
+      }, []);
+      perms = [...new Set(perms)];
+
+      result = {
+        perms,
+        routers: menuDetails,
+      };
+
+      return okResponse(result, "查询权限");
     } catch (error) {
       console.error(`[SysMenu.allRouter] 查询用户 ${userId} 的菜单时出错:`, error.message);
       console.error(`[SysMenu.allRouter] 错误堆栈:`, error.stack);
-      return { success: false, code: 500, msg: "查询失败", data: { perms: [], routers: [] } };
+      throw error;
+    }
+  }
+
+  /**
+   * 获取角色关联的所有菜单ID，包括所有层级的父级菜单
+   */
+  async getAllMenuIdsWithRoles(roleIds) {
+    let menuIds = [];
+    try {
+      if (!roleIds?.length) {
+        return menuIds;
+      }
+
+      const relList = await this.db("lts_role_menu").select("menu_id").whereIn("role_id", roleIds);
+      if (!relList?.length) return menuIds;
+      menuIds = [...new Set(relList.map((it) => it.menu_id))];
+
+      while (true) {
+        const parentMenus = await this.db("lts_menu")
+          .select("pid")
+          .whereIn("id", menuIds)
+          .where("pid", "!=", 0);
+
+        if (!parentMenus?.length) {
+          break;
+        }
+
+        const parentIds = [...new Set(parentMenus.map((m) => m.pid))];
+
+        const notInMenuIds = parentIds.filter((pid) => !menuIds.includes(pid));
+
+        if (!notInMenuIds.length) {
+          break;
+        }
+
+        menuIds = [...menuIds, ...notInMenuIds];
+      }
+
+      return menuIds;
+    } catch (error) {
+      console.error(`getAllMenuIdsWithRoles:`, error);
+      return menuIds;
     }
   }
 }
