@@ -9,7 +9,7 @@ let controller = await loadController("system");
  * app express instance
  * controller.[controller-file-name].method
  */
-export default (app, router, _config) => {
+export default (app, router, chanInst) => {
   const systemRouter = express.Router();
   systemRouter.use(init());
 
@@ -35,7 +35,9 @@ export default (app, router, _config) => {
 
   app.use("/system", systemRouter);
 
-  systemRouter.stack.forEach((layer, index) => {
-    console.log(`systemRouter ${systemRouter.name} : ${index}>>>>`, layer.route);
-  });
+  // systemRouter.stack.forEach((layer, index) => {
+  //   console.log(`systemRouter ${systemRouter.name} : ${index}>>>>`, layer.route);
+  // });
+
+  // chanInst.collectingRoutes(systemRouter, "/system");
 };

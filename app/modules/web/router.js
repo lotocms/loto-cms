@@ -1,3 +1,5 @@
+import express from "express";
+
 import init from "./middleware/init.js";
 import site from "../../middleware/init.js";
 import adapter from "./middleware/adapter.js";
@@ -6,17 +8,19 @@ const {
   helper: { loadController },
 } = Chan;
 let controller = await loadController("web");
-export default async (app, router, config) => {
-  router.use(adapter());
-  router.use(safe());
-  router.use(site());
-  router.use(init());
+export default async (app, _, chanInst) => {
+  const webRouter = express.Router();
+
+  webRouter.use(adapter());
+  webRouter.use(safe());
+  webRouter.use(site());
+  webRouter.use(init());
 
   // 首页模板
-  router.get(["/", "/index.html", "/index.php"], controller.home.index);
+  webRouter.get(["/", "/index.html", "/index.php"], controller.home.index);
 
   // 分类
-  router.get(
+  webRouter.get(
     [
       "/list/:cid", // 兼容 old
       "/:cate/index.html",
@@ -32,7 +36,7 @@ export default async (app, router, config) => {
   );
 
   // 文章页
-  router.get(
+  webRouter.get(
     [
       "/article/:id", // 兼容 old
       "/article/:id.html", // 兼容 old
@@ -47,7 +51,7 @@ export default async (app, router, config) => {
   );
 
   // 单页栏目
-  router.get(
+  webRouter.get(
     [
       "/page/:id", // 兼容 old
       "/page/:id.html", // 兼容 old
@@ -66,16 +70,13 @@ export default async (app, router, config) => {
   );
 
   // 搜索页
-  router.get(
+  webRouter.get(
     ["/search/:keywords/words.html", "/search/:keywords/words:current.html"],
     controller.home.search
   );
 
   // tag列表页
-  router.get(
-    ["/tags/:path/tag.html", "/tags/:path/tag:current.html"],
-    controller.home.tag
-  );
+  webRouter.get(["/tags/:path/tag.html", "/tags/:path/tag:current.html"], controller.home.tag);
   // 使用路由
-  app.use(router);
+  app.use(webRouter);
 };

@@ -11,8 +11,9 @@ const sendResponse = (res, code, message, data = null) => {
   res.json({ code, msg: message, data });
 };
 
+const MIDDLEWARE_NAME = Symbol("middlewareName");
 export default () => {
-  return async (req, res, next) => {
+  let authMiddleware = async (req, res, next) => {
     try {
       const token = req.headers.token || req.cookies?.token || "";
 
@@ -98,4 +99,8 @@ export default () => {
       sendResponse(res, 401, message);
     }
   };
+
+  authMiddleware[MIDDLEWARE_NAME] = "authMiddleware";
+
+  return authMiddleware;
 };

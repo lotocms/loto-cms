@@ -1,3 +1,4 @@
+import { Comments } from "@lotomic/chanjs";
 const {
   config,
   helper: { getIp },
@@ -32,6 +33,7 @@ class ClientController extends Chan.Controller {
     return null;
   }
 
+  @Comments("解析请求IP数据")
   async ip(req, res, next) {
     const queryIP = req.query.ip;
 

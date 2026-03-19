@@ -1,0 +1,9 @@
+{
+  "module": "pm2-logrotate",
+  "settings": {
+    "rotateInterval": "0 0 * * *",
+    "dateFormat": "YYYY-MM-DD",
+    "retain": 90,
+    "compress": true
+  }
+}

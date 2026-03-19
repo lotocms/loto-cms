@@ -3,6 +3,7 @@
     "module": "es2022",
     "target": "ES2022",
     "moduleResolution": "node",
+    "experimentalDecorators": true,
     "checkJs": false // 关闭对 JS 文件的类型检查
   },
   "include": ["app/**/*.js", "config/**/*.js", "types/*.d.ts", "global.d.ts"],
