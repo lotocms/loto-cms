@@ -1,6 +1,6 @@
 {
   "name": "loto-cms",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "type": "module",
   "description": "LotoCMS 是一款基于Node、Express5、MySQL、Vue3研发的高质量实用型CMS系统。",
   "keywords": [
@@ -36,7 +36,7 @@
     "pm2:log:install": "npx pm2 install pm2-logrotate",
     "pm2:log:config": "node scripts/pm2-logrotate-config.mjs",
     "pm2:log:status": "npx pm2 conf pm2-logrotate",
-    "pm2:log:setup": "npm run pm2:logrotate:install && npm run pm2:logrotate:config && npm run pm2:logrotate:status",
+    "pm2:log:setup": "npm run pm2:log:install && npm run pm2:log:config && npm run pm2:log:status",
     "prod:deploy": "npm run build:prd && npm run pm2:start",
     "prod:restart": "npm run build:prd:skip-clean && npm run pm2:restart",
     "check": "npm audit",
