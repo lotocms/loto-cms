@@ -13,7 +13,7 @@ class FriendlinkController extends Chan.Controller {
       let body = req.body;
       body = formatDateFields(body);
       const data = await friendlink.create(body);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -24,7 +24,7 @@ class FriendlinkController extends Chan.Controller {
     try {
       const { id } = req.query;
       const data = await friendlink.delete(id);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -35,7 +35,7 @@ class FriendlinkController extends Chan.Controller {
     try {
       const body = req.body;
       const data = await friendlink.update(body);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -46,7 +46,7 @@ class FriendlinkController extends Chan.Controller {
     try {
       const { id } = req.query;
       const data = await friendlink.detail(id);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -57,7 +57,7 @@ class FriendlinkController extends Chan.Controller {
     try {
       const { id } = req.query;
       const result = await friendlink.detail(id);
-      res.json(this.success({data:result.data}))
+      res.json(this.success({ data: result.data }));
     } catch (err) {
       next(err);
     }
@@ -69,7 +69,7 @@ class FriendlinkController extends Chan.Controller {
       const { cur, keyword, pageSize = 10 } = req.query;
       const result = await friendlink.search(keyword, cur, pageSize);
       data = formatDateFields(data);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -81,7 +81,7 @@ class FriendlinkController extends Chan.Controller {
       const pageSize = 10;
       const result = await friendlink.list(cur, pageSize);
       result.data.list = formatDateFields(result.data.list);
-      res.json(this.success({data:result.data}));  
+      res.json(this.success({ data: result.data }));
     } catch (err) {
       next(err);
     }

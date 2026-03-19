@@ -11,10 +11,7 @@ class ExtensionTableService {
    */
   async getModelIdByCategoryId(categoryId, trx = null) {
     const db = trx || this.db;
-    const result = await db("cms_category")
-      .where("id", categoryId)
-      .select("mid")
-      .first();
+    const result = await db("cms_category").where("id", categoryId).select("mid").first();
     return result?.mid || null;
   }
 
@@ -23,12 +20,9 @@ class ExtensionTableService {
    */
   async getTableNameByModelId(modelId, trx = null) {
     if (!modelId || modelId === "0") return null;
-    
+
     const db = trx || this.db;
-    const result = await db("cms_model")
-      .where("id", modelId)
-      .select("tableName")
-      .first();
+    const result = await db("cms_model").where("id", modelId).select("tableName").first();
     return result?.tableName || null;
   }
 
@@ -37,26 +31,17 @@ class ExtensionTableService {
    */
   async getExtensionTableInfo(articleId, trx = null) {
     const db = trx || this.db;
-    
-    const article = await db("cms_article")
-      .where("id", articleId)
-      .select("cid")
-      .first();
-    
+
+    const article = await db("cms_article").where("id", articleId).select("cid").first();
+
     if (!article?.cid) return null;
-    
-    const category = await db("cms_category")
-      .where("id", article.cid)
-      .select("mid")
-      .first();
-    
+
+    const category = await db("cms_category").where("id", article.cid).select("mid").first();
+
     if (!category?.mid || category.mid === "0") return null;
-    
-    const model = await db("cms_model")
-      .where("id", category.mid)
-      .select("tableName")
-      .first();
-    
+
+    const model = await db("cms_model").where("id", category.mid).select("tableName").first();
+
     return model?.tableName ? { tableName: model.tableName } : null;
   }
 
@@ -65,9 +50,8 @@ class ExtensionTableService {
    */
   async insertExtensionData(tableName, articleId, fieldParams, trx) {
     if (!tableName || !articleId) return null;
-    
-    return await trx(tableName)
-      .insert({ ...fieldParams, aid: articleId });
+
+    return await trx(tableName).insert({ ...fieldParams, aid: articleId });
   }
 
   /**
@@ -75,18 +59,13 @@ class ExtensionTableService {
    */
   async upsertExtensionData(tableName, articleId, fieldParams, trx) {
     if (!tableName || !articleId) return null;
-    
-    const exists = await trx(tableName)
-      .where("aid", articleId)
-      .first();
-    
+
+    const exists = await trx(tableName).where("aid", articleId).first();
+
     if (exists) {
-      return await trx(tableName)
-        .where("aid", articleId)
-        .update(fieldParams);
+      return await trx(tableName).where("aid", articleId).update(fieldParams);
     } else {
-      return await trx(tableName)
-        .insert({ ...fieldParams, aid: articleId });
+      return await trx(tableName).insert({ ...fieldParams, aid: articleId });
     }
   }
 }
@@ -110,8 +89,8 @@ class TagService {
    */
   async insertTagMappings(articleId, tagIds, trx) {
     if (!tagIds.length) return;
-    
-    const mappings = tagIds.map(tid => ({ aid: articleId, tid }));
+
+    const mappings = tagIds.map((tid) => ({ aid: articleId, tid }));
     await trx("cms_articletag").insert(mappings);
   }
 
@@ -120,14 +99,14 @@ class TagService {
    */
   async updateTagCounts(oldTagIds, newTagIds, trx) {
     const db = trx || this.db;
-    
-    const toIncrement = newTagIds.filter(id => !oldTagIds.includes(id));
-    const toDecrement = oldTagIds.filter(id => !newTagIds.includes(id));
-    
+
+    const toIncrement = newTagIds.filter((id) => !oldTagIds.includes(id));
+    const toDecrement = oldTagIds.filter((id) => !newTagIds.includes(id));
+
     if (toIncrement.length > 0) {
       await db("cms_tag").whereIn("id", toIncrement).increment("count", 1);
     }
-    
+
     if (toDecrement.length > 0) {
       await db("cms_tag").whereIn("id", toDecrement).where("count", ">", 0).decrement("count", 1);
     }
@@ -138,10 +117,8 @@ class TagService {
    */
   async incrementTagCounts(tagIds, trx) {
     if (!tagIds.length) return;
-    
-    await trx("cms_tag")
-      .whereIn("id", tagIds)
-      .increment("count", 1);
+
+    await trx("cms_tag").whereIn("id", tagIds).increment("count", 1);
   }
 
   /**
@@ -149,20 +126,15 @@ class TagService {
    */
   async decrementTagCounts(tagIds, trx) {
     if (!tagIds.length) return;
-    
-    await trx("cms_tag")
-      .whereIn("id", tagIds)
-      .where("count", ">", 0)
-      .decrement("count", 1);
+    // auto
+    await trx("cms_tag").whereIn("id", tagIds).where("count", ">", 0).decrement("count", 1);
   }
 
   /**
    * 删除标签映射
    */
   async deleteTagMappings(articleIds, trx) {
-    await trx("cms_articletag")
-      .whereIn("aid", articleIds)
-      .del();
+    await trx("cms_articletag").whereIn("aid", articleIds).del();
   }
 
   /**
@@ -191,10 +163,7 @@ class ImageService {
    */
   async getImagesByArticleId(articleId, trx = null) {
     const db = trx || this.db;
-    const result = await db("cms_article")
-      .select("img", "content")
-      .where("id", articleId)
-      .first();
+    const result = await db("cms_article").select("img", "content").where("id", articleId).first();
 
     const images = [];
     if (result?.img) {
@@ -204,7 +173,7 @@ class ImageService {
       const contentImages = Chan.common.filterImgFromStr(result.content);
       images.push(...contentImages);
     }
-    
+
     return images;
   }
 
@@ -227,7 +196,7 @@ class ImageService {
         allImages.push(...contentImages);
       }
     }
-    
+
     return allImages;
   }
 
@@ -235,7 +204,7 @@ class ImageService {
    * 删除本地图片
    */
   deleteLocalImages(imagePaths) {
-    const localImgs = imagePaths.filter(p => p.includes("public/upload"));
+    const localImgs = imagePaths.filter((p) => p.includes("public/upload"));
     for (const imgPath of localImgs) {
       Chan.helper.delImg(path.join(__dirname, "../../", imgPath));
     }
@@ -260,10 +229,7 @@ class ArticleService extends Chan.Service {
 
       const [insertResult, categoryInfo] = await Promise.all([
         trx(this.tableName).insert(formattedParams),
-        trx("cms_category")
-          .where("id", defaultParams.cid)
-          .select("mid")
-          .first()
+        trx("cms_category").where("id", defaultParams.cid).select("mid").first(),
       ]);
 
       const id = insertResult[0];
@@ -281,25 +247,16 @@ class ArticleService extends Chan.Service {
       const tasks = [];
 
       if (tableRow?.tableName) {
-        tasks.push(
-          trx(tableRow.tableName).insert({ ...fieldParams, aid: id })
-        );
+        tasks.push(trx(tableRow.tableName).insert({ ...fieldParams, aid: id }));
       }
 
       if (defaultParams.tagId && defaultParams.tagId.length > 0) {
-        const tags = defaultParams.tagId
-          .split(",")
-          .map(Number)
-          .filter(Boolean);
-        
+        const tags = defaultParams.tagId.split(",").map(Number).filter(Boolean);
+
         if (tags.length > 0) {
-          tasks.push(
-            trx("cms_articletag").insert(tags.map(tid => ({ aid: id, tid })))
-          );
-          
-          tasks.push(
-            trx("cms_tag").whereIn("id", tags).increment("count", 1)
-          );
+          tasks.push(trx("cms_articletag").insert(tags.map((tid) => ({ aid: id, tid }))));
+
+          tasks.push(trx("cms_tag").whereIn("id", tags).increment("count", 1));
         }
       }
 
@@ -321,10 +278,8 @@ class ArticleService extends Chan.Service {
       return await this.db.transaction(async (trx) => {
         // 1. 批量获取所有文章信息（并行查询）
         const [articles, extensionTables] = await Promise.all([
-          trx(this.tableName)
-            .whereIn("id", ids)
-            .select("id", "cid", "tagId"),
-          this.getExtensionTablesByArticleIds(ids, trx)
+          trx(this.tableName).whereIn("id", ids).select("id", "cid", "tagId"),
+          this.getExtensionTablesByArticleIds(ids, trx),
         ]);
 
         if (articles.length === 0) {
@@ -336,15 +291,13 @@ class ArticleService extends Chan.Service {
           // 删除主文章
           trx(this.tableName).whereIn("id", ids).del(),
           // 删除标签映射
-          this.tagService.deleteTagMappings(ids, trx)
+          this.tagService.deleteTagMappings(ids, trx),
         ];
 
         // 删除扩展表数据
         if (extensionTables.length > 0) {
           for (const tableName of extensionTables) {
-            deleteTasks.push(
-              trx(tableName).whereIn("aid", ids).del()
-            );
+            deleteTasks.push(trx(tableName).whereIn("aid", ids).del());
           }
         }
 
@@ -378,30 +331,26 @@ class ArticleService extends Chan.Service {
    */
   async getExtensionTablesByArticleIds(articleIds, trx = null) {
     const db = trx || this.db;
-    
+
     // 获取所有文章的栏目ID
-    const articles = await db(this.tableName)
-      .whereIn("id", articleIds)
-      .select("cid");
-    
-    const categoryIds = [...new Set(articles.map(a => a.cid))];
-    
+    const articles = await db(this.tableName).whereIn("id", articleIds).select("cid");
+
+    const categoryIds = [...new Set(articles.map((a) => a.cid))];
+
     // 获取模型IDs
     const models = await db("cms_category")
       .whereIn("id", categoryIds)
       .whereNotNull("mid")
       .select("mid");
-    
-    const modelIds = [...new Set(models.map(m => m.mid).filter(Boolean))];
-    
+
+    const modelIds = [...new Set(models.map((m) => m.mid).filter(Boolean))];
+
     if (modelIds.length === 0) return [];
-    
+
     // 获取表名
-    const tables = await db("cms_model")
-      .whereIn("id", modelIds)
-      .select("tableName");
-    
-    return tables.map(t => t.tableName).filter(Boolean);
+    const tables = await db("cms_model").whereIn("id", modelIds).select("tableName");
+
+    return tables.map((t) => t.tableName).filter(Boolean);
   }
 
   // 改：更新文章
@@ -412,7 +361,7 @@ class ArticleService extends Chan.Service {
       return await this.db.transaction(async (trx) => {
         const [articleExists, modelInfo] = await Promise.all([
           trx(this.tableName).where("id", id).first(),
-          this.extensionService.getExtensionTableInfo(id, trx)
+          this.extensionService.getExtensionTableInfo(id, trx),
         ]);
 
         if (!articleExists) {
@@ -420,26 +369,17 @@ class ArticleService extends Chan.Service {
         }
 
         if (modelInfo?.tableName && field) {
-          await this.extensionService.upsertExtensionData(
-            modelInfo.tableName,
-            id,
-            field,
-            trx
-          );
+          await this.extensionService.upsertExtensionData(modelInfo.tableName, id, field, trx);
         }
 
         const tagTasks = [];
         const oldTagIds = this.tagService.parseTagIds(oldTagId);
         const newTagIds = this.tagService.parseTagIds(updateData.tagId);
 
-        tagTasks.push(
-          trx("cms_articletag").where("aid", id).del()
-        );
+        tagTasks.push(trx("cms_articletag").where("aid", id).del());
 
         if (newTagIds.length > 0) {
-          tagTasks.push(
-            this.tagService.insertTagMappings(id, newTagIds, trx)
-          );
+          tagTasks.push(this.tagService.insertTagMappings(id, newTagIds, trx));
         }
 
         await Promise.all(tagTasks);
@@ -475,9 +415,7 @@ class ArticleService extends Chan.Service {
 
     // 如果传了 cid，且是有效数字或数组
     if (cid) {
-      const ids = Array.isArray(cid)
-        ? cid
-        : [cid].flat().map(Number).filter(Boolean);
+      const ids = Array.isArray(cid) ? cid : [cid].flat().map(Number).filter(Boolean);
       if (ids.length > 0) {
         query = query.whereIn("cid", ids);
       }
@@ -486,12 +424,15 @@ class ArticleService extends Chan.Service {
     const totalResult = await query.clone().count("* as count").first();
     const count = parseInt(totalResult?.count || 0, 10);
 
-    const list = await query
-      .orderBy("id", "desc")
-      .offset(offset)
-      .limit(limit);
+    const list = await query.orderBy("id", "desc").offset(offset).limit(limit);
 
-    const formattedList = Chan.helper.formatDateFields(list, ['createdAt', 'updatedAt', 'publishTime', 'startTime', 'endTime']);
+    const formattedList = Chan.helper.formatDateFields(list, [
+      "createdAt",
+      "updatedAt",
+      "publishTime",
+      "startTime",
+      "endTime",
+    ]);
 
     return {
       count,
@@ -504,33 +445,40 @@ class ArticleService extends Chan.Service {
   // 查：文章详情
   async detail(id) {
     const data = await this.db(this.tableName).where("id", id).first();
-    
+
     if (!data || !data.cid) {
       return { success: false, msg: "文章不存在" };
     }
 
     let field = {};
-    const categoryInfo = await this.db("cms_category")
-      .where("id", data.cid)
-      .select("mid")
-      .first();
+    const categoryInfo = await this.db("cms_category").where("id", data.cid).select("mid").first();
 
     if (categoryInfo?.mid && categoryInfo.mid !== "0") {
       const tableRow = await this.db("cms_model")
         .where("id", categoryInfo.mid)
         .select("tableName")
         .first();
-      
+
       if (tableRow?.tableName) {
-        const fieldData = await this.db(tableRow.tableName)
-          .where("aid", id)
-          .first();
+        const fieldData = await this.db(tableRow.tableName).where("aid", id).first();
         field = fieldData || {};
       }
     }
 
-    const formattedData = Chan.helper.formatDateFields(data, ['createdAt', 'updatedAt', 'publishTime', 'startTime', 'endTime']);
-    const formattedField = Chan.helper.formatDateFields(field, ['createdAt', 'updatedAt', 'publishTime', 'startTime', 'endTime']);
+    const formattedData = Chan.helper.formatDateFields(data, [
+      "createdAt",
+      "updatedAt",
+      "publishTime",
+      "startTime",
+      "endTime",
+    ]);
+    const formattedField = Chan.helper.formatDateFields(field, [
+      "createdAt",
+      "updatedAt",
+      "publishTime",
+      "startTime",
+      "endTime",
+    ]);
 
     return { success: true, data: { ...formattedData, field: formattedField } };
   }
@@ -584,12 +532,18 @@ class ArticleService extends Chan.Service {
     const count = parseInt(totalResult?.count || 0, 10);
     const list = await listQuery;
 
-    const formattedList = Chan.helper.formatDateFields(list, ['createdAt', 'updatedAt', 'publishTime', 'startTime', 'endTime']);
+    const formattedList = Chan.helper.formatDateFields(list, [
+      "createdAt",
+      "updatedAt",
+      "publishTime",
+      "startTime",
+      "endTime",
+    ]);
 
     return {
       success: true,
       code: 200,
-      msg: '查询成功',
+      msg: "查询成功",
       data: {
         count,
         total: Math.ceil(count / limit),
@@ -601,9 +555,7 @@ class ArticleService extends Chan.Service {
 
   // 增加浏览量
   async count(id) {
-    const result = await this.db("cms_article")
-      .where("id", id)
-      .increment("pv", 1);
+    const result = await this.db("cms_article").where("id", id).increment("pv", 1);
     return result ? "success" : "fail";
   }
 
@@ -645,7 +597,7 @@ class ArticleService extends Chan.Service {
         .limit(12);
     }
 
-    return { success: true, code: 200, msg: '查询成功', data: { fields } };
+    return { success: true, code: 200, msg: "查询成功", data: { fields } };
   }
 
   // 统计数据
@@ -653,11 +605,7 @@ class ArticleService extends Chan.Service {
     const [week, message, tag, article] = await Promise.all([
       this.db("cms_article")
         .count("* as count")
-        .where(
-          "createdAt",
-          ">=",
-          this.db.raw("DATE_SUB(CURDATE(), INTERVAL 7 DAY)")
-        )
+        .where("createdAt", ">=", this.db.raw("DATE_SUB(CURDATE(), INTERVAL 7 DAY)"))
         .first(),
 
       this.db("cms_message").count("* as count").first(),
@@ -668,7 +616,7 @@ class ArticleService extends Chan.Service {
     return {
       success: true,
       code: 200,
-      msg: '查询成功',
+      msg: "查询成功",
       data: {
         week: week.count,
         message: message.count,

@@ -9,7 +9,7 @@ class SysAppController extends Chan.Controller {
   async find(req, res, next) {
     try {
       const data = await sysApp.find();
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -21,7 +21,7 @@ class SysAppController extends Chan.Controller {
       let _template = Chan.config.template;
       const viewsPath = path.join(Chan.paths.appPath, `/modules/web/view/${_template}`);
       const data = getHtmlFilesSync(viewsPath);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -55,7 +55,7 @@ class SysAppController extends Chan.Controller {
     try {
       const body = req.body;
       const data = await sysApp.update(body);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }

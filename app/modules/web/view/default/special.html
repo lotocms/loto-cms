@@ -1,9 +1,8 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-
-<head>
-    <meta charset="utf-8">
-    <meta name="description" content="{{cate.seoDescription || site.description}}">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="description" content="{{cate.seoDescription || site.description}}" />
     <meta name="keywords" content="{{cate.seoKeywords || site.keywords}}" />
     <meta property="og:title" content="{{cate.seoTitle || cate.name}}-{{site.name}}" />
     <meta property="og:description" content="{{site.description}}" />
@@ -17,11 +16,9 @@
     <link rel="stylesheet" href="{{static_url}}/css/saduo@0.0.2.css" />
     <link rel="stylesheet" href="{{static_url}}/css/saduo-wap@0.0.1.css" />
     <link rel="stylesheet" href="{{static_url}}/css/main.css" />
-</head>
+  </head>
 
-<body class="bg-f8f8f8 pos-r">
-    {{include './common/header.html'}}
-    {{@ article.content}}
-</body>
-
+  <body class="bg-f8f8f8 pos-r">
+    {{include './common/header.html'}} {{@ article.content}}
+  </body>
 </html>

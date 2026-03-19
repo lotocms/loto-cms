@@ -27,23 +27,17 @@ class SysUserService extends Chan.Service {
 
     const user = res.data;
 
-    const roles = await this.db("sys_user_role")
-      .select("role_id")
-      .where("user_id", id)
-      .first();
+    const roles = await this.db("sys_user_role").select("role_id").where("user_id", id).first();
 
     let roleKey = null;
     if (roles && roles.role_id) {
-      const _role = await this.db("sys_role")
-        .select("key")
-        .where("id", roles.role_id)
-        .first();
+      const _role = await this.db("sys_role").select("key").where("id", roles.role_id).first();
       roleKey = _role ? _role.key : null;
     }
 
     user.role = roleKey;
 
-    return { success: true, code: 200, msg: '查询成功', data: user };
+    return { success: true, code: 200, msg: "查询成功", data: user };
   }
 
   /**
@@ -82,13 +76,13 @@ class SysUserService extends Chan.Service {
     return {
       success: true,
       code: 200,
-      msg: '查询成功',
+      msg: "查询成功",
       data: {
         count: count,
         total: Math.ceil(count / pageSize),
         current: cur,
         list: list,
-      }
+      },
     };
   }
 
@@ -103,7 +97,7 @@ class SysUserService extends Chan.Service {
         role_id,
       });
     });
-    return { success: true, code: 200, msg: '创建成功', data: { id: userId } };
+    return { success: true, code: 200, msg: "创建成功", data: { id: userId } };
   }
 
   //改
@@ -113,15 +107,13 @@ class SysUserService extends Chan.Service {
         await trx(this.tableName).where("id", userId).update(params);
       }
 
-      const rowsAffected = await trx("sys_user_role")
-        .where("user_id", userId)
-        .update({ role_id });
+      const rowsAffected = await trx("sys_user_role").where("user_id", userId).update({ role_id });
 
       if (rowsAffected === 0) {
         await trx("sys_user_role").insert({ user_id: userId, role_id });
       }
     });
-    return { success: true, code: 200, msg: '更新成功', data: { affectedRows: 1 } };
+    return { success: true, code: 200, msg: "更新成功", data: { affectedRows: 1 } };
   }
 }
 

@@ -66,6 +66,5 @@ export default (app, _, chanInst) => {
 
   //配置前缀
   app.use("/base", baseRouter);
-
-  chanInst.collectingRoutes(baseRouter, "/base");
+  chanInst.collectingRoutes(baseRouter, "/base", "base");
 };

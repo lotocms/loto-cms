@@ -12,7 +12,7 @@ class MessageController extends Chan.Controller {
     try {
       const body = req.body;
       const data = await message.create(body);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -23,7 +23,7 @@ class MessageController extends Chan.Controller {
     try {
       const { id } = req.query;
       const data = await message.delete(id);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -34,7 +34,7 @@ class MessageController extends Chan.Controller {
     try {
       const body = req.body;
       const data = await message.update(body);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -47,7 +47,7 @@ class MessageController extends Chan.Controller {
       const { id } = req.query;
       let data = await message.detail(id);
       data = formatDateFields(data);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -59,7 +59,7 @@ class MessageController extends Chan.Controller {
       const { cur, keyword, pageSize = 20 } = req.query;
       let data = await message.search(keyword, cur, pageSize);
       data.list = formatDateFields(data.list);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -71,7 +71,7 @@ class MessageController extends Chan.Controller {
       const { cur, pageSize = 20 } = req.query;
       let result = await message.list(cur, pageSize);
       result.data.list = formatDateFields(result.data.list);
-      res.json(this.success({data:result.data}));
+      res.json(this.success({ data: result.data }));
     } catch (err) {
       next(err);
     }

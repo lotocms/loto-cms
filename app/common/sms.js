@@ -1,4 +1,4 @@
-import crypto from 'crypto';
+import crypto from "crypto";
 
 /**
  * 阿里云短信发送工具
@@ -8,12 +8,12 @@ import crypto from 'crypto';
 
 // 常量定义 - 分离固定配置与可配置项
 const API_CONFIG = {
-  host: 'https://sms.aliyuncs.com/',
-  action: 'SingleSendSms',
-  version: '2016-09-27',
-  format: 'JSON',
-  signatureMethod: 'HMAC-SHA1',
-  signatureVersion: '1.0'
+  host: "https://sms.aliyuncs.com/",
+  action: "SingleSendSms",
+  version: "2016-09-27",
+  format: "JSON",
+  signatureMethod: "HMAC-SHA1",
+  signatureVersion: "1.0",
 };
 
 /**
@@ -24,18 +24,19 @@ const API_CONFIG = {
  */
 function generateSignature(params, secret) {
   // 按键名排序并拼接参数
-  const sortedParams = Object.keys(params).sort()
-    .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
-    .join('&');
+  const sortedParams = Object.keys(params)
+    .sort()
+    .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
+    .join("&");
 
   // 构建待签名字符串
-  const signatureStr = `POST&${encodeURIComponent('/')}&${encodeURIComponent(sortedParams)}`;
-  
+  const signatureStr = `POST&${encodeURIComponent("/")}&${encodeURIComponent(sortedParams)}`;
+
   // 计算HMAC-SHA1签名
   return crypto
-    .createHmac('sha1', `${secret}&`)
-    .update(Buffer.from(signatureStr, 'utf-8'))
-    .digest('base64');
+    .createHmac("sha1", `${secret}&`)
+    .update(Buffer.from(signatureStr, "utf-8"))
+    .digest("base64");
 }
 
 /**
@@ -49,11 +50,11 @@ function generateSignature(params, secret) {
  */
 export function createSmsClient(config) {
   // 验证必要配置
-  const requiredFields = ['accessKeyId', 'accessKeySecret', 'signName', 'templateCode'];
-  const missingFields = requiredFields.filter(field => !config[field]);
-  
+  const requiredFields = ["accessKeyId", "accessKeySecret", "signName", "templateCode"];
+  const missingFields = requiredFields.filter((field) => !config[field]);
+
   if (missingFields.length) {
-    throw new Error(`缺少必要配置: ${missingFields.join(', ')}`);
+    throw new Error(`缺少必要配置: ${missingFields.join(", ")}`);
   }
 
   /**
@@ -66,7 +67,7 @@ export function createSmsClient(config) {
   return {
     async send({ phone, params }) {
       if (!phone || !params) {
-        throw new Error('手机号和模板参数为必填项');
+        throw new Error("手机号和模板参数为必填项");
       }
 
       // 构建基础请求参数
@@ -82,7 +83,7 @@ export function createSmsClient(config) {
         SignName: config.signName,
         TemplateCode: config.templateCode,
         RecNum: phone,
-        ParamString: JSON.stringify(params)
+        ParamString: JSON.stringify(params),
       };
 
       // 计算并添加签名
@@ -94,9 +95,9 @@ export function createSmsClient(config) {
 
       // 发送请求并处理响应
       const response = await fetch(API_CONFIG.host, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: formData
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: formData,
       });
 
       const result = await response.json();
@@ -107,7 +108,7 @@ export function createSmsClient(config) {
       }
 
       return result;
-    }
+    },
   };
 }
 
@@ -134,4 +135,3 @@ export function createSmsClient(config) {
 //     }
 //   })();
 // }
-    

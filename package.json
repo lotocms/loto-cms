@@ -20,6 +20,7 @@
     "watch:entry": "babel app.js --out-file dist/app.js --watch",
     "watch:app": "babel app --out-dir dist/app --extensions .js --copy-files --watch",
     "watch:config": "babel config --out-dir dist/config --extensions .js --copy-files --watch",
+    "predev": "npm run build",
     "dev": "npm run build && concurrently -k \"npm:watch:entry\" \"npm:watch:app\" \"npm:watch:config\" \"node --env-file=.env.dev --watch dist/app.js\"",
     "start": "node dist/app.js",
     "start:prd": "node --env-file=.env.prd dist/app.js",

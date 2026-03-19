@@ -10,7 +10,7 @@ class CategoryController extends Chan.Controller {
     try {
       const body = req.body;
       const data = await category.create(body);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -21,7 +21,7 @@ class CategoryController extends Chan.Controller {
     try {
       const { id } = req.query;
       const data = await category.delete(id);
-       res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -32,7 +32,7 @@ class CategoryController extends Chan.Controller {
     try {
       const body = req.body;
       const data = await category.update(body);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -53,7 +53,7 @@ class CategoryController extends Chan.Controller {
     try {
       const { id } = req.query;
       const data = await category.findId(id);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -64,7 +64,7 @@ class CategoryController extends Chan.Controller {
     try {
       const { id } = req.query;
       const data = await category.findSubId(id);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -75,7 +75,7 @@ class CategoryController extends Chan.Controller {
     try {
       const { q } = req.query;
       const data = await category.search(q);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }

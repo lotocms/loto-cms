@@ -7,15 +7,10 @@ const { pages, getChildrenId } = Chan.common;
  */
 export const homeView = (nav) => {
   let view = "index.html";
-  if (
-    Array.isArray(nav) &&
-    nav.length > 0 &&
-    nav[0].pinyin == "home" &&
-    nav[0].listView
-  ) {
+  if (Array.isArray(nav) && nav.length > 0 && nav[0].pinyin == "home" && nav[0].listView) {
     const { type, listView, articleView } = nav[0];
     // type: 0-栏目(渲染列表模板) 1-页面(渲染内容模板)
-    view = type == '0' ? listView : articleView;
+    view = type == "0" ? listView : articleView;
   }
   return view;
 };
@@ -64,12 +59,7 @@ export const listDataParse = ({ cid, category, cate, current, data }) => {
   if (position.length > 0) {
     const lastPath = position[position.length - 1].path; // 提前存储最后一个元素的路径
     const href = `${lastPath}/index`;
-    pageHtml = pages(
-      current,
-      count,
-      data?.list?.articleList?.params?.pageSize || 10,
-      href
-    );
+    pageHtml = pages(current, count, data?.list?.articleList?.params?.pageSize || 10, href);
   }
 
   // 获取模板
@@ -90,10 +80,7 @@ export const articleDataParse = ({ article, cid, category }) => {
   article.content = htmlDecode(article.content);
   // 扩展字段
   Object.getOwnPropertyNames(article.field).forEach(function (key) {
-    if (
-      typeof article.field[key] == "string" &&
-      article.field[key].includes("{")
-    ) {
+    if (typeof article.field[key] == "string" && article.field[key].includes("{")) {
       article.field[key] = JSON.parse(article.field[key]);
     }
   });
@@ -119,12 +106,7 @@ export const searchDataParse = ({ data, keywords, current }) => {
   let { count = 0, list = [] } = data.search;
   let href = `/search/${keywords}/words`;
 
-  let pageHtml = pages(
-    current,
-    count,
-    data?.search?.search?.params?.pageSize || 10,
-    href
-  );
+  let pageHtml = pages(current, count, data?.search?.search?.params?.pageSize || 10, href);
 
   list.forEach((ele) => {
     ele.titles = ele.title.replace(
@@ -148,13 +130,7 @@ export const tagDataParse = ({ data, current, tag, path }) => {
   let { count } = data.tags;
   let href = `/tags/${path}/tag`;
   let query = `?tag=${tag}`;
-  let pageHtml = pages(
-    current,
-    count,
-    data?.tag?.tags?.params?.pageSize || 10,
-    href,
-    query
-  );
+  let pageHtml = pages(current, count, data?.tag?.tags?.params?.pageSize || 10, href, query);
   return { pageHtml };
 };
 
@@ -226,10 +202,7 @@ export const parseJsonFields = (obj) => {
     if (!obj.hasOwnProperty(key)) continue;
     const value = obj[key];
     // 如果是字符串，并且看起来像 JSON（以 { 或 [ 开头）
-    if (
-      typeof value === "string" &&
-      (value.startsWith("{") || value.startsWith("["))
-    ) {
+    if (typeof value === "string" && (value.startsWith("{") || value.startsWith("["))) {
       try {
         result[key] = JSON.parse(value);
       } catch (e) {

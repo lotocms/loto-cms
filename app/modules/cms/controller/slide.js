@@ -13,7 +13,7 @@ class SlideController extends Chan.Controller {
     try {
       const body = req.body;
       const data = await slide.create(body);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -24,7 +24,7 @@ class SlideController extends Chan.Controller {
     try {
       const { id } = req.query;
       const data = await slide.delete(id);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -35,7 +35,7 @@ class SlideController extends Chan.Controller {
     try {
       const body = req.body;
       const data = await slide.update(body);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -46,7 +46,7 @@ class SlideController extends Chan.Controller {
     try {
       const { id } = req.query;
       const data = await slide.detail(id);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -58,7 +58,7 @@ class SlideController extends Chan.Controller {
       const { cur, keyword, cid = 0, pageSize = 10 } = req.query;
       const data = await slide.search(keyword, cur, pageSize, +cid);
       data.list = formatDateFields(data.list);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -70,7 +70,7 @@ class SlideController extends Chan.Controller {
       const { cur, cid = 0, pageSize = 10 } = req.query;
       const result = await slide.list(cur, pageSize, cid);
       result.data.list = formatDateFields(result.data.list);
-      res.json(this.success({data:result.data}));
+      res.json(this.success({ data: result.data }));
     } catch (err) {
       next(err);
     }
@@ -81,15 +81,17 @@ class SlideController extends Chan.Controller {
     try {
       let file = req.files;
       const { originalname, filename, path } = file[0];
-      res.json(this.success({
-        data: {
-          link: path.replace("app", ""),
-          domain: req.hostname,
-          originalname,
-          filename,
-          path: "/" + path.replace(/\\/g, "/").replace(/^app\//, ""),
-        },
-      }));
+      res.json(
+        this.success({
+          data: {
+            link: path.replace("app", ""),
+            domain: req.hostname,
+            originalname,
+            filename,
+            path: "/" + path.replace(/\\/g, "/").replace(/^app\//, ""),
+          },
+        })
+      );
     } catch (err) {
       next(err);
     }

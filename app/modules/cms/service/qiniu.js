@@ -8,7 +8,7 @@ class QiniuService extends Chan.Service {
     const res = await this.query({
       current: 1,
       pageSize: 10,
-      query: { "type_code": "qiniu_oss" },
+      query: { type_code: "qiniu_oss" },
       fields: ["config_key", "config_value"],
     });
     return res;

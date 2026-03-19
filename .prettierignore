@@ -4,6 +4,12 @@ coverage
 .git
 public
 *.log
+.vscode
 package-lock.json
 pnpm-lock.yaml
 yarn.lock
+docs
+.env.*
+.prettierrc.json
+
+app/modules/web/view/**/*.html

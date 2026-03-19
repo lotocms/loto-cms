@@ -11,7 +11,7 @@ class TagService extends Chan.Service {
 
   async has(path) {
     const res = await this.findOne({ query: { path } });
-    return Object.keys(res?.data||{}).length > 0;
+    return Object.keys(res?.data || {}).length > 0;
   }
 
   // 删除tag ,需要删除cms_articleTag.js 里面的tid
@@ -49,7 +49,7 @@ class TagService extends Chan.Service {
     return {
       success: true,
       code: 200,
-      msg: '查询成功',
+      msg: "查询成功",
       data: {
         count: count,
         total: Math.ceil(count / pageSize),
@@ -101,7 +101,7 @@ class TagService extends Chan.Service {
     return {
       success: true,
       code: 200,
-      msg: '查询成功',
+      msg: "查询成功",
       data: {
         count: count,
         total: Math.ceil(count / pageSize),

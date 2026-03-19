@@ -61,12 +61,18 @@ class GatherService extends Chan.Service {
 
     const total = Math.ceil(count / limit);
 
-    const formattedList = Chan.helper.formatDateFields(list, ['createdAt', 'updatedAt', 'publishTime', 'startTime', 'endTime']);
+    const formattedList = Chan.helper.formatDateFields(list, [
+      "createdAt",
+      "updatedAt",
+      "publishTime",
+      "startTime",
+      "endTime",
+    ]);
 
     return {
       success: true,
       code: 200,
-      msg: '查询成功',
+      msg: "查询成功",
       data: {
         count,
         total,

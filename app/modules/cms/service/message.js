@@ -27,7 +27,7 @@ class MessageService extends Chan.Service {
     const res = await this.query({
       current: cur,
       pageSize: pageSize,
-      fields: ["id", "title", "tel","wechat", "content", "createdAt"],
+      fields: ["id", "title", "tel", "wechat", "content", "createdAt"],
     });
     return res;
   }

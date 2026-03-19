@@ -21,7 +21,7 @@ export default () => {
 
       // 3. 验证并解析token
       const { uid, fp, ip } = await getToken(token, JWT_SECRET);
-      console.log('[userauth] token解析结果:', { uid, fp, ip });
+      console.log("[userauth] token解析结果:", { uid, fp, ip });
 
       // 4. 验证用户基本信息
       if (!uid || !fp) {

@@ -17,16 +17,14 @@ class ModelService extends Chan.Service {
           COLLATE=utf8mb4_general_ci
           COMMENT='${remark}'`;
 
-      const createTableStatus = await this.db
-        .raw(sql_create, [])
-        .transacting(trx);
-      
+      const createTableStatus = await this.db.raw(sql_create, []).transacting(trx);
+
       const sql_insert = `INSERT INTO cms_model (model,tableName,status,remark) VALUES(?,?,?,?)`;
       const result = await this.db
         .raw(sql_insert, [model, tableName, status, remark])
         .transacting(trx);
     });
-    return { success: true, code: 200, msg: '创建成功', data: {} };
+    return { success: true, code: 200, msg: "创建成功", data: {} };
   }
 
   async hasUse(id) {
@@ -37,7 +35,7 @@ class ModelService extends Chan.Service {
       .where("c.mid", id)
       .first();
 
-    return { success: true, code: 200, msg: '查询成功', data: { hasUse: res.count > 0 } };
+    return { success: true, code: 200, msg: "查询成功", data: { hasUse: res.count > 0 } };
   }
 
   async findByName(model, tableName) {
@@ -45,15 +43,15 @@ class ModelService extends Chan.Service {
       .whereRaw("model COLLATE utf8mb4_general_ci LIKE ?", [`%${model}%`])
       .orWhereRaw("tableName COLLATE utf8mb4_general_ci LIKE ?", [`%${tableName}%`])
       .select();
-    
-    return { success: true, code: 200, msg: '查询成功', data: res };
+
+    return { success: true, code: 200, msg: "查询成功", data: res };
   }
 
   // 删
   async delete(id) {
     const data = await this.db(this.tableName).where("id", "=", id).first();
     if (!data) {
-      return { success: false, code: 404, msg: '记录不存在', data: {} };
+      return { success: false, code: 404, msg: "记录不存在", data: {} };
     }
     const { tableName } = data;
     await this.db.transaction(async (trx) => {
@@ -61,7 +59,7 @@ class ModelService extends Chan.Service {
       await this.db.raw(sql_del).transacting(trx);
       await this.db(this.tableName).where("id", "=", id).del().transacting(trx);
     });
-    return { success: true, code: 200, msg: '删除成功', data: {} };
+    return { success: true, code: 200, msg: "删除成功", data: {} };
   }
 
   // 修改

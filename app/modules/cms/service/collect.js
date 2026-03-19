@@ -23,7 +23,7 @@ class CollectService extends Chan.Service {
     });
 
     if (!result.success) {
-      throw new Error(result.error || '请求失败');
+      throw new Error(result.error || "请求失败");
     }
 
     const buffer = Buffer.from(result.data);
@@ -87,12 +87,18 @@ class CollectService extends Chan.Service {
 
     const total = Math.ceil(count / limit);
 
-    const formattedList = Chan.helper.formatDateFields(list, ['createdAt', 'updatedAt', 'publishTime', 'startTime', 'endTime']);
+    const formattedList = Chan.helper.formatDateFields(list, [
+      "createdAt",
+      "updatedAt",
+      "publishTime",
+      "startTime",
+      "endTime",
+    ]);
 
     return {
       success: true,
       code: 200,
-      msg: '查询成功',
+      msg: "查询成功",
       data: {
         count,
         total,
@@ -152,12 +158,18 @@ class CollectService extends Chan.Service {
       .limit(limit)
       .offset(offset);
 
-    const formattedList = Chan.helper.formatDateFields(list, ['createdAt', 'updatedAt', 'publishTime', 'startTime', 'endTime']);
+    const formattedList = Chan.helper.formatDateFields(list, [
+      "createdAt",
+      "updatedAt",
+      "publishTime",
+      "startTime",
+      "endTime",
+    ]);
 
     return {
       success: true,
       code: 200,
-      msg: '查询成功',
+      msg: "查询成功",
       count: count || 0,
       total: Math.ceil((count || 0) / limit),
       current: page,

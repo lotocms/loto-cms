@@ -54,19 +54,18 @@ class SysRoleService extends Chan.Service {
         await trx("sys_role_menu").insert(roleMenuData);
       }
     });
-    
-    return { success: true, code: 200, msg: '创建成功', data: { id: roleId } };
+
+    return { success: true, code: 200, msg: "创建成功", data: { id: roleId } };
   }
 
   //改
   async update(params = {}) {
-    const { roleId, roleData, menuIds } = typeof params.roleId !== 'undefined' 
-      ? params 
-      : { roleId: params, roleData: {}, menuIds: [] };
+    const { roleId, roleData, menuIds } =
+      typeof params.roleId !== "undefined" ? params : { roleId: params, roleData: {}, menuIds: [] };
 
     await this.db.transaction(async (trx) => {
       const { id, create_time, create_by, ...cleanRoleData } = roleData;
-      
+
       if (Object.keys(cleanRoleData).length > 0) {
         await trx("sys_role").where("id", roleId).update(cleanRoleData);
       }
@@ -74,13 +73,9 @@ class SysRoleService extends Chan.Service {
       const existingMenuIdsResult = await trx("sys_role_menu")
         .select("menu_id")
         .where("role_id", roleId);
-      const existingMenuIds = existingMenuIdsResult.map(
-        (item) => item.menu_id
-      );
+      const existingMenuIds = existingMenuIdsResult.map((item) => item.menu_id);
 
-      const idsToDelete = existingMenuIds.filter(
-        (id) => !menuIds.includes(id)
-      );
+      const idsToDelete = existingMenuIds.filter((id) => !menuIds.includes(id));
 
       if (idsToDelete.length > 0) {
         await trx("sys_role_menu")
@@ -100,8 +95,8 @@ class SysRoleService extends Chan.Service {
         await trx("sys_role_menu").insert(insertData);
       }
     });
-    
-    return { success: true, code: 200, msg: '更新成功', data: { affectedRows: 1 } };
+
+    return { success: true, code: 200, msg: "更新成功", data: { affectedRows: 1 } };
   }
 }
 

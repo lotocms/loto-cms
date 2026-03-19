@@ -22,4 +22,5 @@ export default (app, _, chanInst) => {
 
   //配置前缀
   app.use("/user/v1", userRouter);
+  chanInst.collectingRoutes(userRouter, "/user/v1", "user");
 };

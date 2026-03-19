@@ -6,7 +6,18 @@ class UserService extends Chan.Service {
   async findUser(username) {
     const res = await this.findOne({
       query: { username },
-      fields: ["id", "username", "email", "password", "avatar", "nickname", "sex", "phone", "wechat", "status"],
+      fields: [
+        "id",
+        "username",
+        "email",
+        "password",
+        "avatar",
+        "nickname",
+        "sex",
+        "phone",
+        "wechat",
+        "status",
+      ],
     });
     return res;
   }

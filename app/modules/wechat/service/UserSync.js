@@ -9,20 +9,10 @@ class UserSyncService extends Chan.Service {
    * 同步微信用户信息到本地数据库（扫码登录和OAuth登录共用）
    */
   async syncWeChatUser({ userInfo, tokenData, ip }) {
-    const {
-      openid,
-      nickname,
-      headimgurl,
-      sex,
-      city,
-      country,
-      province,
-      unionid,
-    } = userInfo;
+    const { openid, nickname, headimgurl, sex, city, country, province, unionid } = userInfo;
     const { access_token, refresh_token, expires_in } = tokenData || {};
     const now = new Date();
-    const safeNickname =
-      (nickname || "").substring(0, 50) || `wx_${openid.slice(-6)}`;
+    const safeNickname = (nickname || "").substring(0, 50) || `wx_${openid.slice(-6)}`;
     const avatar = headimgurl || "";
 
     let userId = null;
@@ -33,9 +23,7 @@ class UserSyncService extends Chan.Service {
       socialRecord = await trx("user_social_login")
         .where("platform", "wechat")
         .where((builder) => {
-          unionid
-            ? builder.where("unionid", unionid)
-            : builder.where("openid", openid);
+          unionid ? builder.where("unionid", unionid) : builder.where("openid", openid);
         })
         .orWhere("openid", openid)
         .first();
@@ -88,7 +76,7 @@ class UserSyncService extends Chan.Service {
       // 获取完整用户信息
       const user = await trx("user").where("id", userId).first();
 
-      return { userId, openid, unionid };;
+      return { userId, openid, unionid };
     });
   }
 }

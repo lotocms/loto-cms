@@ -7,12 +7,16 @@
                 </path>
             </svg>
         </i> -->
-    <input id="search" class="search-input pl-10 pr-10" type="text" maxlength="10" autocomplete="off"
-      placeholder="搜索点什么" />
+    <input
+      id="search"
+      class="search-input pl-10 pr-10"
+      type="text"
+      maxlength="10"
+      autocomplete="off"
+      placeholder="搜索点什么"
+    />
   </div>
-  <button class="ml-5 el-button--primary search-btn" onclick="toSearch()">
-    搜索
-  </button>
+  <button class="ml-5 el-button--primary search-btn" onclick="toSearch()">搜索</button>
 
   <div class="ml-20 f-14 flex items-center">
     <p class="none" id="login">
@@ -20,7 +24,9 @@
       <a href="/public/user/index.html#/login">登录</a>
     </p>
     <p class="none" id="user">
-      您好，<a class="mt-5 el-button c-1A85F8 mr-5" href="/public/user/index.html#/index">个人中心</a>
+      您好，<a class="mt-5 el-button c-1A85F8 mr-5" href="/public/user/index.html#/index"
+        >个人中心</a
+      >
     </p>
   </div>
 </div>
@@ -37,13 +43,12 @@
   }
 
   .c-1A85F8 {
-    color: #1A85F8;
+    color: #1a85f8;
   }
 </style>
 
 <script>
   window.onload = function () {
-
     // 检查是否存在用户信息
     const userInfo = window?.getCookie("un") || "";
     if (userInfo) {
@@ -64,6 +69,5 @@
       document.getElementById("waplogin").style.display = "block";
       document.getElementById("wapuser").style.display = "none";
     }
-
   };
 </script>

@@ -20,7 +20,7 @@ class SysRoleController extends Chan.Controller {
     try {
       const { roleData, menuIds } = req.body;
       const data = await SysRole.create({ roleData, menuIds });
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -53,7 +53,7 @@ class SysRoleController extends Chan.Controller {
     try {
       let { roleId, roleData, menuIds } = req.body;
       const data = await SysRole.update({ roleId, roleData, menuIds });
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }

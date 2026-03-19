@@ -13,4 +13,5 @@ export default (app, router, chanInst) => {
   vipRouter.get("/file/oss", auth(), controller.CodeFile.oss);
 
   app.use("/vip/v1", vipRouter);
+  chanInst.collectingRoutes(baseRouter, "/vip/v1", "vip");
 };

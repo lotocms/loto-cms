@@ -9,8 +9,12 @@ globalThis.requirejs = createRequire(import.meta.url);
 
 const { default: Chan } = await import("@lotomic/chanjs");
 const serverPort = process.env.PORT ? Number(process.env.PORT) : 8000;
-const rebuildResources = process.env.REBUILD_RESOURCES === "true" ? true : false;
-const chan = new Chan({ port: serverPort, snowId: 1, rebuildResources });
+
+const chan = new Chan({
+  port: serverPort,
+  snowId: 1,
+  collectModules: process.env.DEV_COLLECT_MODULES || "",
+});
 await chan.start();
 
 await chan.run((port) => {

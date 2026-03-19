@@ -3,17 +3,13 @@ const {
   common: { success, fail },
 } = Chan;
 
-
 const handleResponse = (req, files) => {
   const isArray = Array.isArray(files);
   const result = (isArray ? files : [files]).map((file) => ({
     originalname: file.originalname,
     filename: file.filename,
     path: `/${file.path.replace(/\\/g, "/").replace(/^app\//, "")}`,
-    url: `${req.protocol}://${req.get("host")}/${file.path.replace(
-      /^app\//,
-      ""
-    )}`,
+    url: `${req.protocol}://${req.get("host")}/${file.path.replace(/^app\//, "")}`,
     size: file.size,
     mimetype: file.mimetype,
   }));
@@ -26,9 +22,11 @@ class UploadController extends Chan.Controller {
   async uploadFile(req, res, next) {
     try {
       if (!req.file) throw new Error("未收到文件");
-      res.json(this.success({
-        data: handleResponse(req, req.file),
-      }));
+      res.json(
+        this.success({
+          data: handleResponse(req, req.file),
+        })
+      );
     } catch (err) {
       next(err);
     }
@@ -38,9 +36,11 @@ class UploadController extends Chan.Controller {
   async uploadFiles(req, res, next) {
     try {
       if (!req.files?.length) throw new Error("未收到文件");
-      res.json(this.success({
-        data: handleResponse(req, req.files),
-      }));
+      res.json(
+        this.success({
+          data: handleResponse(req, req.files),
+        })
+      );
     } catch (err) {
       next(err);
     }
@@ -51,12 +51,14 @@ class UploadController extends Chan.Controller {
     try {
       if (!req.file) throw new Error("未收到图片文件");
       const result = handleResponse(req, req.file);
-      res.json(this.success({
-        data: {
-          ...result,
-          thumbnail: `${result.url}?width=200`, // 可扩展缩略图
-        },
-      }));
+      res.json(
+        this.success({
+          data: {
+            ...result,
+            thumbnail: `${result.url}?width=200`, // 可扩展缩略图
+          },
+        })
+      );
     } catch (err) {
       next(err);
     }

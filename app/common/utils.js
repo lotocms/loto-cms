@@ -1,5 +1,3 @@
-
-
 // 获取子栏目
 export function getChildrenId(py, source) {
   let cate = {};
@@ -12,7 +10,6 @@ export function getChildrenId(py, source) {
   });
   return { cate, id };
 }
-
 
 //过滤body标签
 export function filterBody(str) {
@@ -51,6 +48,3 @@ export function filterImgFromStr(str) {
   }
   return imgArr;
 }
-
-
-

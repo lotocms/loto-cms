@@ -11,5 +11,5 @@ export default (app, _router, chanInst) => {
   //配置前缀
   app.use("/proxy/v1", proxyRouter);
 
-  chanInst.collectingRoutes(proxyRouter, "/proxy/v1");
+  chanInst.collectingRoutes(proxyRouter, "/proxy/v1", "proxy");
 };

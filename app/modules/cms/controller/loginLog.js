@@ -28,7 +28,7 @@ class LoginLogController extends Chan.Controller {
         ...req.body,
       };
       const data = await loginLog.create(body);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -44,7 +44,7 @@ class LoginLogController extends Chan.Controller {
       } else {
         data = await loginLog.delete();
       }
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -56,8 +56,7 @@ class LoginLogController extends Chan.Controller {
       const { cur, pageSize } = schemas.list.parse(req.query);
       let result = await loginLog.list(cur, pageSize);
       result.data.list = formatDateFields(result.data.list);
-      res.json(this.success({data:result.data}));
-
+      res.json(this.success({ data: result.data }));
     } catch (err) {
       next(err);
     }

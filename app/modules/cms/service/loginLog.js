@@ -23,26 +23,29 @@ class LoginLogService extends Chan.Service {
 
       // 删除不在这些ID中的所有记录
       const affectedRows = await this.db(this.tableName).whereNotIn("id", idsToKeep).del();
-      
-      return { success: true, code: 200, msg: '清理成功', data: { affectedRows } };
+
+      return { success: true, code: 200, msg: "清理成功", data: { affectedRows } };
     } catch (error) {
-      console.error('[LoginLog.delete] 清理登录日志失败:', error.message);
-      return { success: false, code: 500, msg: '清理失败', data: {} };
+      console.error("[LoginLog.delete] 清理登录日志失败:", error.message);
+      return { success: false, code: 500, msg: "清理失败", data: {} };
     }
   }
 
   // 根据ID删除
   async deleteByIds(ids) {
     try {
-      const idArray = ids.split(',').map(id => parseInt(id.trim())).filter(id => !isNaN(id));
+      const idArray = ids
+        .split(",")
+        .map((id) => parseInt(id.trim()))
+        .filter((id) => !isNaN(id));
       if (idArray.length === 0) {
-        return { success: false, code: 400, msg: '参数错误', data: {} };
+        return { success: false, code: 400, msg: "参数错误", data: {} };
       }
       const affectedRows = await this.db(this.tableName).whereIn("id", idArray).del();
-      return { success: true, code: 200, msg: '删除成功', data: { affectedRows } };
+      return { success: true, code: 200, msg: "删除成功", data: { affectedRows } };
     } catch (error) {
-      console.error('[LoginLog.deleteByIds] 删除登录日志失败:', error.message);
-      return { success: false, code: 500, msg: '删除失败', data: {} };
+      console.error("[LoginLog.deleteByIds] 删除登录日志失败:", error.message);
+      return { success: false, code: 500, msg: "删除失败", data: {} };
     }
   }
 
@@ -56,24 +59,22 @@ class LoginLogService extends Chan.Service {
       // 按创建时间倒序查询(要求 chanjs >= 2.1.1)
       sort: { createdAt: "desc" },
     });
-    
+
     if (res.success && res.data && res.data.list) {
-      const userIds = res.data.list.map(item => item.uid).filter(uid => uid);
+      const userIds = res.data.list.map((item) => item.uid).filter((uid) => uid);
       if (userIds.length > 0) {
-        const users = await this.db('sys_user')
-          .select('id', 'username')
-          .whereIn('id', userIds);
+        const users = await this.db("sys_user").select("id", "username").whereIn("id", userIds);
         const userMap = {};
-        users.forEach(user => {
+        users.forEach((user) => {
           userMap[user.id] = user.username;
         });
-        res.data.list = res.data.list.map(item => ({
+        res.data.list = res.data.list.map((item) => ({
           ...item,
-          username: userMap[item.uid] || ''
+          username: userMap[item.uid] || "",
         }));
       }
     }
-    
+
     return res;
   }
 }

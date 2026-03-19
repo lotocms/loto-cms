@@ -37,9 +37,7 @@ class ScanLoginController extends Chan.Controller {
       );
 
       if (qrResponse.errcode) {
-        throw new Error(
-          `生成二维码失败：${qrResponse.errmsg}（${qrResponse.errcode}）`
-        );
+        throw new Error(`生成二维码失败：${qrResponse.errmsg}（${qrResponse.errcode}）`);
       }
 
       // 存储扫码状态
@@ -119,18 +117,12 @@ class ScanLoginController extends Chan.Controller {
       // 4. 提取事件参数（注意：不同 XML 解析工具可能有不同的结构，需根据实际调整）
       const eventType = eventData.Event || eventData.xml?.Event; // 兼容可能的嵌套结构
       const sceneStr =
-        (eventData.EventKey || eventData.xml?.EventKey)?.replace(
-          "qrscene_",
-          ""
-        ) || "";
+        (eventData.EventKey || eventData.xml?.EventKey)?.replace("qrscene_", "") || "";
       const openid = eventData.FromUserName || eventData.xml?.FromUserName;
       const unionid = eventData.UnionID || eventData.xml?.UnionID || null;
 
       // 5. 处理扫码/关注事件（仅处理相关类型）
-      if (
-        ["SCAN", "subscribe"].includes(eventType) &&
-        sceneStr.startsWith("scan_")
-      ) {
+      if (["SCAN", "subscribe"].includes(eventType) && sceneStr.startsWith("scan_")) {
         const scanRecord = await db("wechat_scan_login")
           .where("scan_id", sceneStr)
           .where("expire_time", ">", new Date())
@@ -162,18 +154,14 @@ class ScanLoginController extends Chan.Controller {
       }
 
       // 查询扫码记录
-      const scanRecord = await db("wechat_scan_login")
-        .where("scan_id", scanId)
-        .first();
+      const scanRecord = await db("wechat_scan_login").where("scan_id", scanId).first();
       if (!scanRecord) {
         return res.json(this.fail({ msg: "扫码记录不存在", data: { code: "SCAN_NOT_FOUND" } }));
       }
 
       // 检查是否过期
       if (new Date(scanRecord.expire_time) < new Date()) {
-        await db("wechat_scan_login")
-          .where("id", scanRecord.id)
-          .update({ status: 3 });
+        await db("wechat_scan_login").where("id", scanRecord.id).update({ status: 3 });
         return res.json(this.fail({ msg: "二维码已过期", data: { code: "SCAN_EXPIRED" } }));
       }
 
@@ -190,8 +178,7 @@ class ScanLoginController extends Chan.Controller {
           const userInfo = await request(
             `https://api.weixin.qq.com/cgi-bin/user/info?access_token=${accessToken}&openid=${openid}&lang=zh_CN`
           );
-          if (userInfo.errcode)
-            throw new Error(`获取用户信息失败：${userInfo.errmsg}`);
+          if (userInfo.errcode) throw new Error(`获取用户信息失败：${userInfo.errmsg}`);
 
           // 检查用户是否关注公众号（subscribe=1表示已关注）
           if (userInfo.subscribe !== 1) {
@@ -217,9 +204,7 @@ class ScanLoginController extends Chan.Controller {
           });
 
           // 更新状态并生成token
-          await db("wechat_scan_login")
-            .where("id", scanRecord.id)
-            .update({ status: 2 });
+          await db("wechat_scan_login").where("id", scanRecord.id).update({ status: 2 });
           const token = setToken(
             { uid: userId, fp: req.cookies._f || "", ip: req.cookies._i },
             JWT_SECRET,

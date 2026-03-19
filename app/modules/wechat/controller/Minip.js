@@ -24,29 +24,35 @@ class MinipController extends Chan.Controller {
 
       // 参数验证
       if (!code) {
-        return res.status(400).json(this.fail({ msg: "缺少授权码", data: { code: "MISSING_AUTH_CODE" } }));
+        return res
+          .status(400)
+          .json(this.fail({ msg: "缺少授权码", data: { code: "MISSING_AUTH_CODE" } }));
       }
 
       if (!MINIPROGRAM_APPID || !MINIPROGRAM_APPSECRET) {
-        return res.status(500).json(this.fail({ msg: "小程序配置不完整", data: { code: "MINIPROGRAM_CONFIG_ERROR" } }));
+        return res
+          .status(500)
+          .json(this.fail({ msg: "小程序配置不完整", data: { code: "MINIPROGRAM_CONFIG_ERROR" } }));
       }
 
       // 调用微信小程序登录接口
-      const sessionData = await request(
-        "https://api.weixin.qq.com/sns/jscode2session",
-        {
-          method: "GET",
-          params: {
-            appid: MINIPROGRAM_APPID,
-            secret: MINIPROGRAM_APPSECRET,
-            js_code: code,
-            grant_type: "authorization_code",
-          },
-        }
-      );
+      const sessionData = await request("https://api.weixin.qq.com/sns/jscode2session", {
+        method: "GET",
+        params: {
+          appid: MINIPROGRAM_APPID,
+          secret: MINIPROGRAM_APPSECRET,
+          js_code: code,
+          grant_type: "authorization_code",
+        },
+      });
 
       if (sessionData.errcode) {
-        return res.status(400).json(this.fail({ msg: `小程序登录失败：${sessionData.errmsg}`, data: { code: `WECHAT_${sessionData.errcode}` } }));
+        return res.status(400).json(
+          this.fail({
+            msg: `小程序登录失败：${sessionData.errmsg}`,
+            data: { code: `WECHAT_${sessionData.errcode}` },
+          })
+        );
       }
 
       const { openid, session_key, unionid } = sessionData;

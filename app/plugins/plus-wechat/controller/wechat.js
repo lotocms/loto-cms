@@ -1,8 +1,6 @@
 const {
   config,
-  common: {
-    success, fail ,
-  },
+  common: { success, fail },
 } = Chan;
 class WechatController {
   //微信小程序登录
@@ -15,11 +13,7 @@ class WechatController {
       const result = await fetch(url);
       const { openid, session_key, unionid } = result.json();
       // 设置token
-      const token = setToken(
-        { openid: openid },
-        config.JWT_SECRET,
-        config.JWT_EXPIRES_IN
-      );
+      const token = setToken({ openid: openid }, config.JWT_SECRET, config.JWT_EXPIRES_IN);
       // console.log(req.headers)
       // 加密返回token,获取token解密然后通过openid或者unionid来查询
       // openid: "oy9xU5F3p5UPSRv3D8lhEfJkbqGI"

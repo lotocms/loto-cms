@@ -33,12 +33,8 @@ export const xml2json = (xmlStr) => {
  * 生成随机字符串（签名、扫码标识等场景用）
  */
 export const createNonceStr = (length = 16) => {
-  const chars =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  return Array.from(
-    { length },
-    () => chars[Math.floor(Math.random() * chars.length)]
-  ).join("");
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  return Array.from({ length }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
 };
 
 /**
@@ -64,9 +60,7 @@ export const getGlobalAccessToken = async () => {
   });
 
   if (response.errcode) {
-    throw new Error(
-      `获取access_token失败：${response.errmsg}（${response.errcode}）`
-    );
+    throw new Error(`获取access_token失败：${response.errmsg}（${response.errcode}）`);
   }
   return response.access_token;
 };
@@ -76,18 +70,13 @@ export const getGlobalAccessToken = async () => {
  */
 export const getJsapiTicket = async () => {
   const accessToken = await getGlobalAccessToken();
-  const response = await request(
-    "https://api.weixin.qq.com/cgi-bin/ticket/getticket",
-    {
-      method: "GET",
-      params: { access_token: accessToken, type: "jsapi" },
-    }
-  );
+  const response = await request("https://api.weixin.qq.com/cgi-bin/ticket/getticket", {
+    method: "GET",
+    params: { access_token: accessToken, type: "jsapi" },
+  });
 
   if (response.errcode !== 0) {
-    throw new Error(
-      `获取jsapi_ticket失败：${response.errmsg}（${response.errcode}）`
-    );
+    throw new Error(`获取jsapi_ticket失败：${response.errmsg}（${response.errcode}）`);
   }
   return response.ticket;
 };
@@ -106,5 +95,4 @@ export const verifyEventSignature = (signature, timestamp, nonce) => {
 /**
  * 生成唯一扫码标识（扫码登录用）
  */
-export const generateScanId = () =>
-  `scan_${crypto.randomBytes(12).toString("hex")}`;
+export const generateScanId = () => `scan_${crypto.randomBytes(12).toString("hex")}`;

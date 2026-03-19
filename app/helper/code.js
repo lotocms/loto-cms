@@ -9,5 +9,5 @@ export const genCode = (str, key) => {
   for (let [index, char] of [...str].entries()) {
     endCode += parseInt(key[index]) + parseInt(char);
   }
-  return endCode.substr(0,4);
+  return endCode.substr(0, 4);
 };

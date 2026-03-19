@@ -69,15 +69,20 @@ class CategoryService extends Chan.Service {
       .orderBy(`${this.tableName}.orderBy`, "asc");
 
     if (key) {
-      query = query.whereRaw(
-        `${this.tableName}.name COLLATE utf8mb4_general_ci LIKE ?`,
-        [`%${key}%`]
-      );
+      query = query.whereRaw(`${this.tableName}.name COLLATE utf8mb4_general_ci LIKE ?`, [
+        `%${key}%`,
+      ]);
     }
 
     const res = await query;
-    const formattedRes = Chan.helper.formatDateFields(res, ['createdAt', 'updatedAt', 'publishTime', 'startTime', 'endTime']);
-    return { success: true, code: 200, msg: '查询成功', data: formattedRes };
+    const formattedRes = Chan.helper.formatDateFields(res, [
+      "createdAt",
+      "updatedAt",
+      "publishTime",
+      "startTime",
+      "endTime",
+    ]);
+    return { success: true, code: 200, msg: "查询成功", data: formattedRes };
   }
 }
 

@@ -1,11 +1,9 @@
-
 //过滤body标签
 export function filterBody(str) {
   const result = /<body[^>]*>([\s\S]*)<\/body>/.exec(str);
   if (result && result.length === 2) return result[1];
   return str;
 }
-
 
 // 获取图片
 export function filterImgFromStr(str) {
@@ -26,7 +24,6 @@ export function filterImgFromStr(str) {
   }
   return imgArr;
 }
-
 
 /**
  * @description 过滤非必要字段

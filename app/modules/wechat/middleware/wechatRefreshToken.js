@@ -26,9 +26,7 @@ export async function chatRefreshToken(req, res, next) {
 
   try {
     // 1. 查询数据库
-    const record = await db("user_social_login")
-      .where({ platform: "wechat", openid })
-      .first();
+    const record = await db("user_social_login").where({ platform: "wechat", openid }).first();
 
     if (!record || !record.access_token) {
       return sendAuthExpired(res);
@@ -58,17 +56,14 @@ export async function chatRefreshToken(req, res, next) {
         return sendAuthExpired(res);
       }
 
-      const refreshData = await request(
-        "https://api.weixin.qq.com/sns/oauth2/refresh_token",
-        {
-          method: "GET",
-          params: {
-            appid: APPID,
-            grant_type: "refresh_token",
-            refresh_token,
-          },
-        }
-      );
+      const refreshData = await request("https://api.weixin.qq.com/sns/oauth2/refresh_token", {
+        method: "GET",
+        params: {
+          appid: APPID,
+          grant_type: "refresh_token",
+          refresh_token,
+        },
+      });
 
       if (refreshData.errcode) {
         // refresh_token 失效，清理
@@ -79,20 +74,14 @@ export async function chatRefreshToken(req, res, next) {
         return sendAuthExpired(res);
       }
 
-      const {
+      const { access_token: newToken, refresh_token: newRefreshToken, expires_in } = refreshData;
+
+      await db("user_social_login").where({ platform: "wechat", openid }).update({
         access_token: newToken,
         refresh_token: newRefreshToken,
         expires_in,
-      } = refreshData;
-
-      await db("user_social_login")
-        .where({ platform: "wechat", openid })
-        .update({
-          access_token: newToken,
-          refresh_token: newRefreshToken,
-          expires_in,
-          updated_at: new Date(),
-        });
+        updated_at: new Date(),
+      });
 
       req.wechat_access_token = newToken;
       return next();
@@ -113,5 +102,11 @@ export async function chatRefreshToken(req, res, next) {
  */
 function sendAuthExpired(res) {
   const controller = new Chan.Controller();
-  return res.status(401).json(controller.fail({ msg: "登录已过期，请重新扫码授权", data: { code: "WECHAT_AUTH_EXPIRED", action: "reauth" }, code: 401 }));
+  return res.status(401).json(
+    controller.fail({
+      msg: "登录已过期，请重新扫码授权",
+      data: { code: "WECHAT_AUTH_EXPIRED", action: "reauth" },
+      code: 401,
+    })
+  );
 }

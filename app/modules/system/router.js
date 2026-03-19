@@ -35,9 +35,6 @@ export default (app, router, chanInst) => {
 
   app.use("/system", systemRouter);
 
-  // systemRouter.stack.forEach((layer, index) => {
-  //   console.log(`systemRouter ${systemRouter.name} : ${index}>>>>`, layer.route);
-  // });
-
-  // chanInst.collectingRoutes(systemRouter, "/system");
+  // initialize module routes
+  chanInst.collectingRoutes(systemRouter, "/system", "system");
 };

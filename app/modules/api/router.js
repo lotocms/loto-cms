@@ -3,7 +3,7 @@ import express from "express";
 const { loadController } = Chan.helper;
 let controller = await loadController("api");
 export default (app, _, chanInst) => {
-  const apiRouter = XPathExpression.Router();
+  const apiRouter = express.Router();
 
   apiRouter.get("/site", controller.Api.site);
   apiRouter.get("/frag", controller.Api.fragList);
@@ -28,4 +28,5 @@ export default (app, _, chanInst) => {
 
   //配置前缀
   app.use("/api/v1", apiRouter);
+  chanInst.collectingRoutes(apiRouter, "/api/v1", "api");
 };

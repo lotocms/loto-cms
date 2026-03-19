@@ -25,7 +25,7 @@ class ModelController extends Chan.Controller {
     try {
       const body = req.body;
       const data = await model.delete(body);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -36,7 +36,7 @@ class ModelController extends Chan.Controller {
     try {
       const body = req.body;
       const data = await model.update(body);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -47,7 +47,7 @@ class ModelController extends Chan.Controller {
     try {
       const { id } = req.query;
       const data = await model.detail(id);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -58,7 +58,7 @@ class ModelController extends Chan.Controller {
     try {
       const { id } = req.query;
       const data = await model.hasUse(id);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -69,7 +69,7 @@ class ModelController extends Chan.Controller {
     try {
       const { cur, pageSize = 10 } = req.query;
       const result = await model.list(cur, pageSize);
-      res.json(this.success({data:result.data}));
+      res.json(this.success({ data: result.data }));
     } catch (err) {
       next(err);
     }

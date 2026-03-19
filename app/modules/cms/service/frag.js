@@ -38,7 +38,7 @@ class FragService extends Chan.Service {
       .orderBy("id", "desc");
 
     const frags = arrToObj(list, "name", "content");
-    return { success: true, code: 200, msg: '查询成功', data: frags };
+    return { success: true, code: 200, msg: "查询成功", data: frags };
   }
 
   // 查
@@ -56,7 +56,7 @@ class FragService extends Chan.Service {
           .whereRaw("name COLLATE utf8mb4_general_ci LIKE ?", [`%${key}%`])
           .count("id", { as: "count" })
       : await this.db(this.tableName).count("id", { as: "count" });
-    
+
     const offset = parseInt((cur - 1) * pageSize);
     const list = key
       ? await this.db(this.tableName)
@@ -75,7 +75,7 @@ class FragService extends Chan.Service {
     return {
       success: true,
       code: 200,
-      msg: '查询成功',
+      msg: "查询成功",
       data: {
         list: list,
         count: count,

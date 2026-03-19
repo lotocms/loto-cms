@@ -1,5 +1,4 @@
 const {
- 
   helper: { filterFields, arrToObj },
 } = Chan;
 
@@ -54,14 +53,9 @@ const common = {
    * @param {Number} 1 ->返回对象 2->返回数组
    * @returns
    */
-  async getArticleList({
-    start = 0,
-    len = 5,
-    attr = "",
-    excludeAttr = "",
-    type = 2,
-  }) {
-    const query = Chan.db.select([
+  async getArticleList({ start = 0, len = 5, attr = "", excludeAttr = "", type = 2 }) {
+    const query = Chan.db
+      .select([
         "a.id",
         "a.title",
         "a.shortTitle",
@@ -101,12 +95,11 @@ const common = {
    */
   async getArticleListByCid({ cid, len = 5, attr = [] }) {
     // 获取所有id
-    const res = await Chan.db.select("id")
-      .from("cms_category")
-      .where("pid", cid);
+    const res = await Chan.db.select("id").from("cms_category").where("pid", cid);
     const ids = [cid, ...res.map((item) => item.id)];
     // 构建查询条件
-    let queryBuilder = Chan.db.select(
+    let queryBuilder = Chan.db
+      .select(
         "a.id",
         "a.title",
         "a.shortTitle",
@@ -142,26 +135,18 @@ const common = {
    */
   async getArticleListByCidCate({ cid, len = 5, attr = [] }) {
     // 获取当前栏目及其所有子栏目（包含 pinyin）
-    const res = await Chan.db.select("id", "pinyin")
-      .from("cms_category")
-      .where("pid", cid);
+    const res = await Chan.db.select("id", "pinyin").from("cms_category").where("pid", cid);
     const childCategories = res.filter((item) => item.id !== cid); // 子栏目
     const allCategoryIds = [...childCategories.map((item) => item.id)];
 
     if (allCategoryIds.length === 0) return {};
 
     // 构建一个 id -> pinyin 的映射
-    const idToPinyin = Object.fromEntries(
-      res.map((item) => [item.id, item.pinyin])
-    );
+    const idToPinyin = Object.fromEntries(res.map((item) => [item.id, item.pinyin]));
 
     // 如果是叶子节点（没有子栏目），就只查自己
     if (res.length === 0 && cid !== 0) {
-      const category = await db
-        .select("pinyin")
-        .from("cms_category")
-        .where("id", cid)
-        .first();
+      const category = await db.select("pinyin").from("cms_category").where("id", cid).first();
       if (category) {
         idToPinyin[cid] = category.pinyin;
       }
@@ -235,17 +220,7 @@ const common = {
    */
   async getAllParentCategory(idArray = []) {
     const result = await Chan.db("cms_category")
-      .select([
-        "id",
-        "pid",
-        "name",
-        "pinyin",
-        "path",
-        "orderBy",
-        "target",
-        "status",
-        "type",
-      ])
+      .select(["id", "pid", "name", "pinyin", "path", "orderBy", "target", "status", "type"])
       .where("pid", 0)
       .where("type", 0)
       .where((builder) => !idArray.length || builder.whereIn("id", idArray))
@@ -258,12 +233,7 @@ const common = {
    * @param {Array} cids 栏目id
    * @returns {Array}
    */
-  async getArticleListByCids({
-    cids = [],
-    attr = 2,
-    toplen = 1,
-    listlen = 5,
-  } = {}) {
+  async getArticleListByCids({ cids = [], attr = 2, toplen = 1, listlen = 5 } = {}) {
     // 去重函数
     function uniqueByPath(arr) {
       const map = new Map();
@@ -291,9 +261,7 @@ const common = {
       ]);
 
       // 获取并处理标签
-      let tagsPromises = _list.map((sub) =>
-        common.getTagsFromArticleByAid(sub.id)
-      );
+      let tagsPromises = _list.map((sub) => common.getTagsFromArticleByAid(sub.id));
       let tags = await Promise.all(tagsPromises);
       tags = [].concat(...tags); // 将二维数组转为一维
       tags = uniqueByPath(tags);
@@ -319,7 +287,8 @@ const common = {
    */
   async getArticlePvList({ len = 10, cid = "" } = {}) {
     // 1. 基础查询构建
-    const query = Chan.db.select(
+    const query = Chan.db
+      .select(
         "a.id",
         "a.title",
         "a.shortTitle",
@@ -359,7 +328,8 @@ const common = {
    * @returns
    */
   async getNewImgList({ len = 10, cid = "", attr = "" } = {}) {
-    let query = Chan.db.select(
+    let query = Chan.db
+      .select(
         "a.id",
         "a.title",
         "a.shortTitle",
@@ -376,10 +346,7 @@ const common = {
       .where("a.status", 0);
 
     if (cid) {
-      const ids = await Chan.db("cms_category")
-        .select("id")
-        .where("pid", cid)
-        .pluck("id");
+      const ids = await Chan.db("cms_category").select("id").where("pid", cid).pluck("id");
 
       ids.push(cid);
       query.whereIn("a.cid", ids);
@@ -420,7 +387,8 @@ const common = {
     const count = total.count || 1;
 
     // 查询文章列表
-    const result = await Chan.db.select(
+    const result = await Chan.db
+      .select(
         "a.id",
         "a.title",
         "a.shortTitle",
@@ -512,10 +480,7 @@ const common = {
    * @returns {Array} 返回数组
    */
   async fetchTagsByArticleId({ id, len = 5 }) {
-    const article = await Chan.db("cms_article")
-      .select("tagId")
-      .where("id", id)
-      .first();
+    const article = await Chan.db("cms_article").select("tagId").where("id", id).first();
 
     if (!article || !article.tagId) {
       return [];
@@ -533,7 +498,8 @@ const common = {
   // banner轮播图
   async bannerSlide({ cur = 1, pageSize = 10 }) {
     const offset = parseInt((cur - 1) * pageSize);
-    const list = await Chan.db.select(["id", "title", "imgUrl", "linkUrl", "content"])
+    const list = await Chan.db
+      .select(["id", "title", "imgUrl", "linkUrl", "content"])
       .from("cms_slide")
       .limit(pageSize)
       .offset(offset)
@@ -560,7 +526,8 @@ const common = {
     // 限制每页最多100条
     pageSize = Math.min(parseInt(pageSize, 10) || 10, 100);
 
-    const list = await Chan.db.select(["name", "mark", "content"])
+    const list = await Chan.db
+      .select(["name", "mark", "content"])
       .from("cms_frag")
       .limit(pageSize)
       .offset(0)
@@ -573,7 +540,8 @@ const common = {
     // 限制每页最多100条
     pageSize = Math.min(parseInt(pageSize, 10) || 10, 100);
 
-    const res = await Chan.db.select(["id", "name", "path", "count"])
+    const res = await Chan.db
+      .select(["id", "name", "path", "count"])
       .from("cms_tag")
       .limit(pageSize)
       .offset(0)
@@ -587,10 +555,7 @@ const common = {
       return false;
     }
 
-    const modIdResult = await Chan.db("cms_category")
-      .select("mid")
-      .where("id", data.cid)
-      .first();
+    const modIdResult = await Chan.db("cms_category").select("mid").where("id", data.cid).first();
 
     if (!modIdResult || modIdResult.mid === "0") {
       return { ...data, field: {} };
@@ -611,10 +576,7 @@ const common = {
       throw new Error("Invalid table name");
     }
 
-    const fieldResult = await Chan.db.select("*")
-      .from(tableNameStr)
-      .where("aid", id)
-      .first();
+    const fieldResult = await Chan.db.select("*").from(tableNameStr).where("aid", id).first();
 
     return { ...data, field: fieldResult || {} };
   },
@@ -645,9 +607,7 @@ const common = {
 
   // 增加计数器
   async count({ id }) {
-    const result = await Chan.db("cms_article")
-      .where("id", id)
-      .increment("pv", 1);
+    const result = await Chan.db("cms_article").where("id", id).increment("pv", 1);
     return result;
   },
 
@@ -680,17 +640,14 @@ const common = {
     }
 
     // 获取总数
-    const totalResult = await Chan.db.count("* as count")
+    const totalResult = await Chan.db
+      .count("* as count")
       .from(queryBuilder.as("temp_query"))
       .first();
     const count = parseInt(totalResult.count, 10);
 
     // 获取分页数据
-    const list = await queryBuilder
-      .clone()
-      .orderBy("a.id", "desc")
-      .offset(offset)
-      .limit(pageSize);
+    const list = await queryBuilder.clone().orderBy("a.id", "desc").offset(offset).limit(pageSize);
 
     return {
       count,

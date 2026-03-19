@@ -20,7 +20,7 @@ class SiteController extends Chan.Controller {
     try {
       const body = req.body;
       const result = await Site.updateInfo(body);
-     res.json(this.success(result));
+      res.json(this.success(result));
     } catch (err) {
       next(err);
     }
@@ -29,7 +29,7 @@ class SiteController extends Chan.Controller {
   // 获取磁盘信息
   async runEnv(req, res, next) {
     try {
-       res.json(this.success({ data:{ dirname: Chan.paths.rootPath }}));
+      res.json(this.success({ data: { dirname: Chan.paths.rootPath } }));
     } catch (err) {
       next(err);
     }

@@ -1,8 +1,4 @@
-import {
-  getJsapiTicket,
-  createNonceStr,
-  calculateSignature,
-} from "../common/wechat-util.js";
+import { getJsapiTicket, createNonceStr, calculateSignature } from "../common/wechat-util.js";
 
 // 从全局对象获取配置和工具
 const {
@@ -87,12 +83,14 @@ class ShareController extends Chan.Controller {
         });
       }
 
-      res.json(this.success({
-        data: {
-          shareConfig: configData.shareConfig,
-          jsApiList: configData.jsApiList,
-        },
-      }));
+      res.json(
+        this.success({
+          data: {
+            shareConfig: configData.shareConfig,
+            jsApiList: configData.jsApiList,
+          },
+        })
+      );
     } catch (error) {
       console.error("获取分享配置失败:", error);
       res.status(500).json(this.fail({ msg: "获取分享配置失败，请稍后重试" }));

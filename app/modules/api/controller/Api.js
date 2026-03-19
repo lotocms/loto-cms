@@ -15,7 +15,7 @@ class ApiController extends Chan.Controller {
   async site(req, res, next) {
     try {
       const data = await Site.info();
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (error) {
       console.error(error);
       next(error);
@@ -26,7 +26,7 @@ class ApiController extends Chan.Controller {
   async fragList(req, res, next) {
     try {
       const data = await frag.list();
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (error) {
       console.error(error);
       next(error);
@@ -37,7 +37,7 @@ class ApiController extends Chan.Controller {
   async getTag(req, res, next) {
     try {
       const data = await tag.list();
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (error) {
       console.error(error);
       next(error);
@@ -48,7 +48,7 @@ class ApiController extends Chan.Controller {
   async getFriendlink(req, res, next) {
     try {
       const data = await friendlink.list();
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (error) {
       console.error(error);
       next(error);
@@ -60,7 +60,7 @@ class ApiController extends Chan.Controller {
     try {
       const category = await Api.category();
       const nav = tree(category);
-      res.json(this.success({data:nav}));
+      res.json(this.success({ data: nav }));
     } catch (error) {
       console.error(error);
       next(error);
@@ -157,7 +157,7 @@ class ApiController extends Chan.Controller {
     try {
       const { cur = 1, pageSize = 10 } = req.query;
       const data = await Api.banner(cur, pageSize);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (error) {
       console.error(error);
       next(error);
@@ -169,7 +169,7 @@ class ApiController extends Chan.Controller {
     try {
       const { id = 1, len = 10 } = req.query;
       const data = await Api.pv(len, id);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (error) {
       console.error(error);
       next(error);
@@ -186,7 +186,7 @@ class ApiController extends Chan.Controller {
     try {
       const { id = "", attr = "", len = 10 } = req.query;
       const data = await Api.articleImg({ len, id, attr });
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (error) {
       console.error(error);
       next(error);
@@ -198,7 +198,7 @@ class ApiController extends Chan.Controller {
     try {
       const { name = "", current = 1, pageSize = 10 } = req.query;
       const data = await Api.tagList({ name, current, pageSize });
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (error) {
       console.error(error);
       next(error);
@@ -210,7 +210,7 @@ class ApiController extends Chan.Controller {
     try {
       const { id, cid } = req.query;
       const data = await Api.prev({ id, cid });
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (error) {
       console.error(error);
       next(error);
@@ -222,7 +222,7 @@ class ApiController extends Chan.Controller {
     try {
       const { id, cid } = req.query;
       const data = await Api.next({ id, cid });
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (error) {
       console.error(error);
       next(error);
@@ -237,7 +237,7 @@ class ApiController extends Chan.Controller {
     try {
       const { id } = req.query;
       const data = await Api.getTagsById(id);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (error) {
       console.error(error);
       next(error);
@@ -255,7 +255,7 @@ class ApiController extends Chan.Controller {
     try {
       const { key, cur, pageSize, cid } = req.query;
       const data = await Api.search(key, cur, pageSize, cid);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (error) {
       console.error(error);
       next(error);
@@ -272,7 +272,7 @@ class ApiController extends Chan.Controller {
     try {
       const { id } = req.query;
       const data = await Api.pvadd(id);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (error) {
       console.error(error);
       next(error);

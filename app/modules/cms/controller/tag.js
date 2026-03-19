@@ -8,7 +8,7 @@ class TagController extends Chan.Controller {
     try {
       const body = req.body;
       const data = await tag.create(body);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -19,7 +19,7 @@ class TagController extends Chan.Controller {
     try {
       const { id } = req.query;
       const data = await tag.delete(id);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -30,7 +30,7 @@ class TagController extends Chan.Controller {
     try {
       const body = req.body;
       const data = await tag.update(body);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -41,7 +41,7 @@ class TagController extends Chan.Controller {
     try {
       const { id } = req.query;
       const data = await tag.detail(id);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -52,7 +52,7 @@ class TagController extends Chan.Controller {
     try {
       const { cur, pageSize = 50 } = req.query;
       const data = await tag.list(cur, pageSize);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -62,7 +62,7 @@ class TagController extends Chan.Controller {
     try {
       const { path } = req.query;
       const data = await tag.has(path);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -73,7 +73,7 @@ class TagController extends Chan.Controller {
     try {
       const { cur, keyword, pageSize = 10 } = req.query;
       const data = await tag.search(keyword, cur, pageSize);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }

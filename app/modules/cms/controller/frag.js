@@ -13,7 +13,7 @@ class FragController extends Chan.Controller {
     try {
       const body = req.body;
       const data = await frag.create(body);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -24,7 +24,7 @@ class FragController extends Chan.Controller {
     try {
       const { id } = req.query;
       const data = await frag.delete(id);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -35,7 +35,7 @@ class FragController extends Chan.Controller {
     try {
       const body = req.body;
       const data = await frag.update(body);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -45,7 +45,7 @@ class FragController extends Chan.Controller {
   async find(req, res, next) {
     try {
       const data = await frag.detail();
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -56,7 +56,7 @@ class FragController extends Chan.Controller {
     try {
       const { id } = req.query;
       const data = await frag.detail(id);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -68,7 +68,7 @@ class FragController extends Chan.Controller {
       const { cur, keywords, pageSize = 20 } = req.query;
       const data = await frag.search(keywords, cur, pageSize);
       data.list = formatDateFields(data.list);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -80,7 +80,7 @@ class FragController extends Chan.Controller {
       const { cur, pageSize = 10 } = req.query;
       const data = await frag.list(cur, pageSize);
       data.list = formatDateFields(data.list);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }

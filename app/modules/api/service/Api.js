@@ -75,10 +75,7 @@ class ApiService extends Chan.Service {
    */
   async getArticleListByCid(cid, len = 5, attr = "") {
     // 获取所有子栏目ID
-    const res = await this.db
-      .select("id")
-      .from("cms_category")
-      .where("pid", cid);
+    const res = await this.db.select("id").from("cms_category").where("pid", cid);
 
     const ids = [cid, ...res.map((item) => item.id)];
 
@@ -131,17 +128,7 @@ class ApiService extends Chan.Service {
    */
   async getAllParentCategory(idArray = []) {
     return await this.db("cms_category")
-      .select([
-        "id",
-        "pid",
-        "name",
-        "pinyin",
-        "path",
-        "orderBy",
-        "target",
-        "status",
-        "type",
-      ])
+      .select(["id", "pid", "name", "pinyin", "path", "orderBy", "target", "status", "type"])
       .where("pid", 0)
       .where("type", 0)
       .where((builder) => !idArray.length || builder.whereIn("id", idArray))
@@ -187,10 +174,7 @@ class ApiService extends Chan.Service {
       .where("a.status", 0);
 
     if (id) {
-      const ids = await this.db("cms_category")
-        .select("id")
-        .where("pid", id)
-        .pluck("id");
+      const ids = await this.db("cms_category").select("id").where("pid", id).pluck("id");
 
       ids.push(id);
       query.whereIn("cid", ids);
@@ -226,10 +210,7 @@ class ApiService extends Chan.Service {
       .where("a.status", 0);
 
     if (id) {
-      const ids = await this.db("cms_category")
-        .select("id")
-        .where("pid", id)
-        .pluck("id");
+      const ids = await this.db("cms_category").select("id").where("pid", id).pluck("id");
 
       ids.push(id);
       query.whereIn("a.cid", ids);
@@ -386,10 +367,7 @@ class ApiService extends Chan.Service {
     }
 
     // 通过栏目ID查找模型ID
-    const modId = await this.db("cms_category")
-      .select("mid")
-      .where("id", data.cid)
-      .first();
+    const modId = await this.db("cms_category").select("mid").where("id", data.cid).first();
 
     let field = {};
     if (modId && modId.mid !== "0") {
@@ -400,8 +378,7 @@ class ApiService extends Chan.Service {
         .first();
 
       // 通过表名查找文章扩展字段
-      field =
-        (await this.db(tableName.tableName).where("aid", id).first()) || {};
+      field = (await this.db(tableName.tableName).where("aid", id).first()) || {};
     }
 
     return { ...data, field };
@@ -501,9 +478,7 @@ class ApiService extends Chan.Service {
    * @returns {Promise<string>} 操作结果
    */
   async pvadd(id) {
-    const result = await this.db("cms_article")
-      .where("id", id)
-      .increment("pv", 1);
+    const result = await this.db("cms_article").where("id", id).increment("pv", 1);
     return !!result;
   }
 }

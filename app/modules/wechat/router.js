@@ -23,4 +23,6 @@ export default (app, _, chanInst) => {
   wechatRouter.post("/minip/login", controller.Minip.login);
   //配置前缀
   app.use("/wechat/v1", wechatRouter);
+
+  chanInst.collectingRoutes(baseRouter, "/wechat/v1", "wechat");
 };

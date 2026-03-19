@@ -127,5 +127,9 @@ export default (app, _, chanInst) => {
   cmsRouter.get("/loginLog/list", auth(), controller.loginLog.list);
 
   //配置前缀
-  app.use("/cms", cmsRouter);
+  const prefix = "/cms";
+  app.use(prefix, cmsRouter);
+
+  // update
+  chanInst.collectingRoutes(cmsRouter, prefix, "cms");
 };

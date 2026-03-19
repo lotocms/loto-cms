@@ -27,7 +27,7 @@ class SlideService extends Chan.Service {
     const res = await this.query({
       current: cur,
       pageSize: pageSize,
-      fields: ["id", "title", "imgUrl", "linkUrl", "status", "sort"]
+      fields: ["id", "title", "imgUrl", "linkUrl", "status", "sort"],
     });
     return res;
   }

@@ -31,9 +31,11 @@ class AuthLoginController extends Chan.Controller {
         `${REDIRECT_URI}/public/user/index.html#/login`
       )}&response_type=code&scope=${scope}&state=${fp}&connect_redirect=1#wechat_redirect`;
 
-      res.json(this.success({
-        data: { qr_url: wechatQrUrl, expires_in: 300 },
-      }));
+      res.json(
+        this.success({
+          data: { qr_url: wechatQrUrl, expires_in: 300 },
+        })
+      );
     } catch (error) {
       console.error("生成OAuth二维码失败:", error);
       res.status(500).json(this.fail({ msg: "生成二维码失败，请稍后重试" }));
@@ -61,18 +63,15 @@ class AuthLoginController extends Chan.Controller {
       }
 
       // 获取OAuth token
-      const tokenData = await request(
-        "https://api.weixin.qq.com/sns/oauth2/access_token",
-        {
-          method: "GET",
-          params: {
-            appid: APPID,
-            secret: APPSECRET,
-            code,
-            grant_type: "authorization_code",
-          },
-        }
-      );
+      const tokenData = await request("https://api.weixin.qq.com/sns/oauth2/access_token", {
+        method: "GET",
+        params: {
+          appid: APPID,
+          secret: APPSECRET,
+          code,
+          grant_type: "authorization_code",
+        },
+      });
 
       // 获取用户信息
       const userInfo = await request("https://api.weixin.qq.com/sns/userinfo", {

@@ -11,11 +11,7 @@ const {
  * @param {string} valueField - 作为值的字段名
  * @returns {Object} 转换后的对象
  */
-const arrToObj = (
-  arr,
-  keyField = "config_key",
-  valueField = "config_value"
-) => {
+const arrToObj = (arr, keyField = "config_key", valueField = "config_value") => {
   // 输入验证
   if (!Array.isArray(arr)) {
     throw new Error("arrToObj 期望接收数组作为第一个参数");

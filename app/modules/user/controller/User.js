@@ -10,13 +10,13 @@ import bcrypt from "bcryptjs";
 class UserController extends Chan.Controller {
   async getExternalIP() {
     try {
-      const response = await fetch('http://ip-api.com/json/?lang=zh-CN');
+      const response = await fetch("http://ip-api.com/json/?lang=zh-CN");
       const data = await response.json();
-      if (data.status === 'success') {
+      if (data.status === "success") {
         return data.query;
       }
     } catch (error) {
-      console.error('[UserController] 获取外网IP失败:', error.message);
+      console.error("[UserController] 获取外网IP失败:", error.message);
     }
     return null;
   }
@@ -30,14 +30,14 @@ class UserController extends Chan.Controller {
       await sendMail(email, "修改密码验证码", genResetPasswordEmail(emailcode));
     }
 
-    res.json(this.success({ data: "邮件发送成功"}));
+    res.json(this.success({ data: "邮件发送成功" }));
   }
 
   async login(req, res, next) {
     try {
       const { username, password, fp } = req.body;
       const ip = getIp(req);
-      
+
       const result = await User.findUser(username);
       if (result.success && result.data) {
         let user = result.data;
@@ -48,40 +48,40 @@ class UserController extends Chan.Controller {
         const match = await bcrypt.compare(password, user.password);
         if (user && match) {
           const { id, username, status, avatar, nickname } = user;
-          
+
           // 如果是本地地址或没有获取到IP，尝试获取外网IP
           let realIP = ip;
-          const isLocalAddress = !ip || ip === '::1' || ip === '127.0.0.1' || ip === 'localhost';
+          const isLocalAddress = !ip || ip === "::1" || ip === "127.0.0.1" || ip === "localhost";
           if (isLocalAddress) {
             const externalIP = await this.getExternalIP();
             if (externalIP) {
               realIP = externalIP;
             }
           }
-          
+
           // 使用请求中的 fp，如果没有则使用默认值
-          const realFP = fp || '';
-          
+          const realFP = fp || "";
+
           // 设置token
-          const token = setToken(
-            { uid: id, fp: realFP, ip: realIP },
-            JWT_SECRET,
-            JWT_EXPIRES_IN
-          );
-          
+          const token = setToken({ uid: id, fp: realFP, ip: realIP }, JWT_SECRET, JWT_EXPIRES_IN);
+
           // 设置 cookie，保持与 token 中的 fp 和 ip 一致
-          res.cookie('_f', realFP, {
+          res.cookie("_f", realFP, {
             httpOnly: false,
             maxAge: 7 * 24 * 60 * 60 * 1000, // 7天
-            sameSite: 'lax'
+            sameSite: "lax",
           });
-          res.cookie('_i', realIP, {
+          res.cookie("_i", realIP, {
             httpOnly: false,
             maxAge: 7 * 24 * 60 * 60 * 1000, // 7天
-            sameSite: 'lax'
+            sameSite: "lax",
           });
-          
-          res.json(this.success({ data: { id, username, status, token, ip: realIP, avatar, headimgurl: avatar }}));
+
+          res.json(
+            this.success({
+              data: { id, username, status, token, ip: realIP, avatar, headimgurl: avatar },
+            })
+          );
         } else {
           res.json(this.fail({ msg: "密码错误！" }));
         }
@@ -108,8 +108,7 @@ class UserController extends Chan.Controller {
 
   async checkEmail(req, res, next) {
     try {
-      res.json(this.success({data: "邮件发送成功" }));
-      
+      res.json(this.success({ data: "邮件发送成功" }));
     } catch (err) {
       next(err);
     }
@@ -120,7 +119,7 @@ class UserController extends Chan.Controller {
     try {
       const { uid } = req.user;
       const data = await User.detail(uid);
-       res.json(this.success({data }));
+      res.json(this.success({ data }));
     } catch (err) {
       next(err);
     }

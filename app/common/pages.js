@@ -1,5 +1,5 @@
-import fs from 'fs';
-import path from 'path';
+import fs from "fs";
+import path from "path";
 /**
  * @description 输出分页标签
  * @param {*} current 当前页面
@@ -9,13 +9,13 @@ import path from 'path';
  * @param {*} query 查询参数
  * @returns 返回分页html
  */
-export function pages(current, total, pageSize, href,query='') {
+export function pages(current, total, pageSize, href, query = "") {
   let pageTemp = [];
   let totalPage = Math.ceil(total / pageSize);
-  if(totalPage<=1){
-    return '';
+  if (totalPage <= 1) {
+    return "";
   }
-  
+
   let pageStr = `<p>共${total}条记录，共${totalPage},当前${current}</p>`;
   //上一页
   if (current == 1) {

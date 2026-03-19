@@ -10,14 +10,7 @@ class Config extends Chan.Service {
    */
   async detail(id) {
     const res = await this.findById(id, {
-      fields: [
-        "id",
-        "type_code",
-        "config_key",
-        "config_value",
-        "status",
-        "remark",
-      ],
+      fields: ["id", "type_code", "config_key", "config_value", "status", "remark"],
     });
     return res;
   }
@@ -39,14 +32,7 @@ class Config extends Chan.Service {
    */
   async list({
     query,
-    fields = [
-      "id",
-      "type_code",
-      "config_key",
-      "config_value",
-      "status",
-      "remark",
-    ],
+    fields = ["id", "type_code", "config_key", "config_value", "status", "remark"],
   }) {
     let res = await this.query({
       current: 1,

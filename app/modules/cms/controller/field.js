@@ -1,7 +1,5 @@
 const {
-  common: {
-    success, fail
-  },
+  common: { success, fail },
 } = Chan;
 import field from "../service/field.js";
 class FieldController extends Chan.Controller {
@@ -15,20 +13,18 @@ class FieldController extends Chan.Controller {
         return;
       }
       const data = await field.create(body);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
   }
-
-   
 
   // 删除
   async delete(req, res, next) {
     try {
       const { id } = req.query;
       const data = await field.delete(id);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -39,7 +35,7 @@ class FieldController extends Chan.Controller {
     try {
       const body = req.body;
       const data = await field.update(body);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }
@@ -50,7 +46,7 @@ class FieldController extends Chan.Controller {
     try {
       const { id } = req.query;
       const result = await field.detail(id);
-      res.json(this.success({data:result.data}));
+      res.json(this.success({ data: result.data }));
     } catch (err) {
       next(err);
     }
@@ -61,7 +57,7 @@ class FieldController extends Chan.Controller {
     try {
       const { cur, mid, pageSize = 10 } = req.query;
       const data = await field.list(mid, cur, pageSize);
-     res.json(this.success(data));
+      res.json(this.success(data));
     } catch (err) {
       next(err);
     }

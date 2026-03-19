@@ -157,8 +157,8 @@
 
 - id: 文章 id
 
-
 ## 小程序登录
+
 <http://localhost:3000/wechat/minip/login>
 
 入参：
@@ -181,8 +181,6 @@
 - userInfo.watermark.timestamp: 用户 watermark 时间戳
 - userInfo.watermark.appid: 用户 watermark appid
 
-
 ## 获取微信用户信息
 
 http://localhost:3000/user/v1/detail
-

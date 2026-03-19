@@ -1,14 +1,7 @@
 import path from "path";
 import { safePathSchema } from "../../../middleware/guard.js";
 const {
-  config: {
-    APP_VERSION,
-    APP_NAME,
-    port,
-    APP_VERSION_TIME,
-    APP_AUTHOR_EMAIL,
-    APP_AUTHOR_WECHAT,
-  },
+  config: { APP_VERSION, APP_NAME, port, APP_VERSION_TIME, APP_AUTHOR_EMAIL, APP_AUTHOR_WECHAT },
   helper: { delImg, formatDateFields },
   common: { success, fail, filterBody },
 } = Chan;
@@ -26,7 +19,7 @@ class ArticleController extends Chan.Controller {
       const data = await article.create(body);
       res.json(this.success(data));
     } catch (err) {
-      console.error('[ArticleController.create] 错误:', err);
+      console.error("[ArticleController.create] 错误:", err);
       next(err);
     }
   }
@@ -50,7 +43,7 @@ class ArticleController extends Chan.Controller {
       const data = await article.update(body);
       res.json(this.success(data));
     } catch (err) {
-      console.error('[ArticleController.update] 错误:', err);
+      console.error("[ArticleController.update] 错误:", err);
       next(err);
     }
   }
@@ -105,15 +98,17 @@ class ArticleController extends Chan.Controller {
     try {
       let file = req.files;
       const { originalname, filename, path } = file[0];
-      res.json(this.success({
-        data: {
-          link: path.replace("app", ""),
-          domain: req.hostname,
-          originalname,
-          filename,
-          path: "/" + path.replace(/\\/g, "/").replace(/^app\//, ""),
-        },
-      }));
+      res.json(
+        this.success({
+          data: {
+            link: path.replace("app", ""),
+            domain: req.hostname,
+            originalname,
+            filename,
+            path: "/" + path.replace(/\\/g, "/").replace(/^app\//, ""),
+          },
+        })
+      );
     } catch (err) {
       next(err);
     }
@@ -132,16 +127,18 @@ class ArticleController extends Chan.Controller {
   async tongji(req, res, next) {
     try {
       const result = await article.tongji();
-      res.json(this.success({
-        data: {
-          ...result.data,
-          APP_VERSION,
-          APP_NAME,
-          APP_VERSION_TIME,
-          APP_AUTHOR_EMAIL,
-          APP_AUTHOR_WECHAT,
-        },
-      }));
+      res.json(
+        this.success({
+          data: {
+            ...result.data,
+            APP_VERSION,
+            APP_NAME,
+            APP_VERSION_TIME,
+            APP_AUTHOR_EMAIL,
+            APP_AUTHOR_WECHAT,
+          },
+        })
+      );
     } catch (err) {
       next(err);
     }
@@ -161,6 +158,6 @@ class ArticleController extends Chan.Controller {
       next(err);
     }
   }
-};
+}
 
 export default new ArticleController();

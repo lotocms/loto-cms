@@ -5,8 +5,7 @@ class FieldService extends Chan.Service {
   // 增
   async create(body) {
     // 新增字的同时需要新增表
-    const { mid, cname, ename, type, val, defaultVal, orderBy, length } =
-      body;
+    const { mid, cname, ename, type, val, defaultVal, orderBy, length } = body;
     await this.db.transaction(async (trx) => {
       // 查询模块名称
       let table = await this.db
@@ -77,7 +76,7 @@ class FieldService extends Chan.Service {
       }
       return result;
     });
-    return { success: true, code: 200, msg: '创建成功', data: {} };
+    return { success: true, code: 200, msg: "创建成功", data: {} };
   }
 
   async findByName(cname, ename) {
@@ -86,16 +85,16 @@ class FieldService extends Chan.Service {
       [cname, ename]
     );
     const data = result[0];
-    return data 
-      ? { success: true, code: 200, msg: '查询成功', data }
-      : { success: false, code: 404, msg: '记录不存在', data: null };
+    return data
+      ? { success: true, code: 200, msg: "查询成功", data }
+      : { success: false, code: 404, msg: "记录不存在", data: null };
   }
 
   // 删
   async delete(id) {
     const data = await this.db(this.tableName).where("id", "=", id).first();
     if (!data) {
-      return { success: false, code: 404, msg: '记录不存在', data: {} };
+      return { success: false, code: 404, msg: "记录不存在", data: {} };
     }
     const { mid, ename } = data;
     await this.db.transaction(async (trx) => {
@@ -107,7 +106,7 @@ class FieldService extends Chan.Service {
       await this.db.raw(sql_del).transacting(trx);
       await this.db(this.tableName).where("id", "=", id).del().transacting(trx);
     });
-    return { success: true, code: 200, msg: '删除成功', data: {} };
+    return { success: true, code: 200, msg: "删除成功", data: {} };
   }
 
   // 修改
@@ -115,7 +114,7 @@ class FieldService extends Chan.Service {
     const { id, length, ename, old_ename } = body;
     delete body.id;
     delete body.old_ename;
-    
+
     await this.db.transaction(async (trx) => {
       const result = await this.db(this.tableName)
         .where("id", "=", id)
@@ -130,8 +129,7 @@ class FieldService extends Chan.Service {
         if (!tableName) {
           throw new Error("找不到模型表格");
         }
-        const safeLength =
-          Number.isInteger(length) && length > 0 ? length : 255;
+        const safeLength = Number.isInteger(length) && length > 0 ? length : 255;
         const fieldTypeMap = {
           1: `varchar(${safeLength || 255}) `,
           2: "text",
@@ -147,13 +145,11 @@ class FieldService extends Chan.Service {
         let sqlType = fieldTypeMap[body.type];
 
         const sql = `ALTER TABLE ?? CHANGE ?? ?? ${sqlType}`;
-        await this.db
-          .raw(sql, [tableName, old_ename, ename])
-          .transacting(trx);
+        await this.db.raw(sql, [tableName, old_ename, ename]).transacting(trx);
       }
     });
 
-    return { success: true, code: 200, msg: '更新成功', data: {} };
+    return { success: true, code: 200, msg: "更新成功", data: {} };
   }
 
   // 获取全量field，默认100个cur = 1,
@@ -169,22 +165,19 @@ class FieldService extends Chan.Service {
       .orderBy("id", "desc");
     const count = total[0].count || 1;
 
-    const models = await this.db.raw(
-      "SELECT model,tableName FROM cms_model WHERE id=?",
-      [mid]
-    );
+    const models = await this.db.raw("SELECT model,tableName FROM cms_model WHERE id=?", [mid]);
 
     return {
       success: true,
       code: 200,
-      msg: '查询成功',
+      msg: "查询成功",
       data: {
         count: count,
         total: Math.ceil(count / pageSize),
         current: +cur,
         list: list,
         model: models[0],
-      }
+      },
     };
   }
 
