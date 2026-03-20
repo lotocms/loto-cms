@@ -1,3 +1,4 @@
+import { Comments, InvalidError } from "@lotomic/chanjs";
 import menuService from "../service/menu.js";
 
 const {
@@ -44,6 +45,21 @@ class MenuController extends Chan.Controller {
       const body = req.body;
       const data = await menuService.createNew(body);
       res.json(this.success(data));
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  @Comments("保存目录,菜单,按钮")
+  async save(req, res, next) {
+    try {
+      const body = req.body;
+      let data = { ...body };
+      if (req.user?.uid) {
+        data.update_by = req.user.uid;
+      }
+      const ret = await menuService.save(data);
+      res.json(ret);
     } catch (error) {
       next(error);
     }

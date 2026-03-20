@@ -1,5 +1,5 @@
 import { buildMenuTreeNodes } from "../../../helper/tree.js";
-import { okResponse } from "@lotomic/chanjs";
+import { InvalidError, okResponse } from "@lotomic/chanjs";
 
 export class MenuService extends Chan.Service {
   fields = [
@@ -151,6 +151,12 @@ export class MenuService extends Chan.Service {
     const sortno = await this.getLevelMaxSortno(pid);
     const res = await this.insert({ ...others, pid, sortno });
     return res;
+  }
+
+  async save(data) {
+    if (!data?.id) throw new InvalidError();
+    const { id, ...updated } = data;
+    return await this.updateById(id, updated);
   }
 
   async getLevelMaxSortno(pid = 0) {

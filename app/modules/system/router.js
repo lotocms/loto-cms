@@ -17,12 +17,18 @@ export default (app, router, chanInst) => {
   systemRouter.get("/suser/detail", controller.LotoUser.detail);
   systemRouter.post("/suser/create", controller.LotoUser.create);
 
+  // resouce
+  systemRouter.get('/resource/list',controller.resource.list);
+  systemRouter.get('/resource/detail',controller.resource.detail);
+  systemRouter.post('/resource/save',controller.resource.save);
+
   // menu TODO auth
 
   systemRouter.get("/menu/authRouter", controller.menu.allRouter);
   systemRouter.post("/menu/create", controller.menu.create);
   systemRouter.get("/menu/detail", controller.menu.detail);
   systemRouter.get("/menu/list", controller.menu.list);
+  systemRouter.post("/menu/save", controller.menu.save);
 
   systemRouter.get("/menu/sub_list", controller.menu.subList);
   systemRouter.get("/menu/tree/all_nodes", controller.menu.allTreeNodes);
